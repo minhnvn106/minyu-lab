@@ -1,0 +1,393 @@
+import { createRoot, createRef } from "@wordpress/element";
+import domReady from "@wordpress/dom-ready";
+/**
+ * External dependencies
+ */
+import Slider from "react-slick";
+
+/**
+ * Get SVG functions from global eb_frontend.
+ * Fall back to no-ops if the controls frontend bundle didn't load
+ * (e.g. blocked by a firewall/optimizer) so the slider still initializes.
+ */
+const ebFrontend = window.eb_frontend || {};
+const EBRenderIconWithSVG = ebFrontend.EBRenderIconWithSVG || (() => "");
+const loadSvgIcons = ebFrontend.loadSvgIcons || (() => {});
+const generateArrowHTML = ebFrontend.generateArrowHTML || (() => "");
+
+domReady(function () {
+    //Execute after DOM loads.
+    const wrappers = document.getElementsByClassName("eb-slider-wrapper");
+
+    for (let wrapper of wrappers) {
+        let version = wrapper.getAttribute("data-version");
+
+        if (version == null || version === "v1") {
+            let settings = JSON.parse(wrapper.getAttribute("data-settings"));
+            let images = JSON.parse(wrapper.getAttribute("data-images"));
+            let sliderContentType = wrapper.getAttribute(
+                "data-sliderContentType",
+            );
+            let sliderType = wrapper.getAttribute("data-sliderType");
+            let textAlign = wrapper.getAttribute("data-textAlign");
+            let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
+            let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
+            let TitleTag = wrapper.getAttribute("data-titleTag") || "h2";
+            let ContentTag = wrapper.getAttribute("data-contentTag") || "p";
+
+            const slider = createRef();
+
+            const SampleNextArrow = (props) => {
+                const { className, style, onClick, arrowNextIcon } = props;
+                return (
+                    <div
+                        className={className}
+                        style={{ ...style, display: "block" }}
+                        onClick={onClick}
+                    >
+                        {EBRenderIconWithSVG(arrowNextIcon)}
+                    </div>
+                );
+            };
+
+            const SamplePrevArrow = (props) => {
+                const { className, style, onClick, arrowPrevIcon } = props;
+                return (
+                    <div
+                        className={className}
+                        style={{ ...style, display: "block" }}
+                        onClick={onClick}
+                    >
+                        {EBRenderIconWithSVG(arrowPrevIcon)}
+                    </div>
+                );
+            };
+
+            settings.nextArrow = (
+                <SampleNextArrow arrowNextIcon={arrowNextIcon} />
+            );
+            settings.prevArrow = (
+                <SamplePrevArrow arrowPrevIcon={arrowPrevIcon} />
+            );
+
+            const sliderTypeClass =
+                sliderType === "content"
+                    ? "eb-slider-type-content"
+                    : "eb-slider-type-image";
+
+            const SliderComponent = () => (
+                <Slider
+                    ref={slider}
+                    {...settings}
+                    key={`${settings.autoplay}-${settings.adaptiveHeight}`}
+                    className={sliderTypeClass}
+                >
+                    {images.map((image) => (
+                        <div className={`eb-slider-item ${sliderContentType}`}>
+                            {sliderType === "image" &&
+                                image.buttonUrl &&
+                                image.isValidUrl && (
+                                    <>
+                                        <a
+                                            href={
+                                                image.buttonUrl &&
+                                                    image.isValidUrl
+                                                    ? image.buttonUrl
+                                                    : "#"
+                                            }
+                                            target={
+                                                image.openNewTab
+                                                    ? "_blank"
+                                                    : "_self"
+                                            }
+                                            rel="noopener"
+                                        >
+                                            <img
+                                                className="eb-slider-image"
+                                                src={image.url}
+                                                alt={
+                                                    image.alt
+                                                        ? image.alt
+                                                        : image.title
+                                                }
+                                            />
+                                        </a>
+                                    </>
+                                )}
+                            {sliderType === "image" &&
+                                !image.buttonUrl &&
+                                !image.isValidUrlf && (
+                                    <img
+                                        className="eb-slider-image"
+                                        src={image.url}
+                                        alt={
+                                            image.alt ? image.alt : image.title
+                                        }
+                                    />
+                                )}
+                            {sliderType === "content" && (
+                                <>
+                                    <img
+                                        className="eb-slider-image"
+                                        src={image.url}
+                                        alt={
+                                            image.alt ? image.alt : image.title
+                                        }
+                                    />
+                                    <div
+                                        className={`eb-slider-content align-${textAlign} ${sliderContentType === "content-1" && image.enableContentLink && image.contentLink && image.contentLink.length > 0 && image.isContentUrlValid ? 'has-content-link' : ''}`}
+                                        data-content-link={sliderContentType === "content-1" && image.enableContentLink && image.contentLink && image.contentLink.length > 0 && image.isContentUrlValid ? image.contentLink : ''}
+                                        data-content-target={sliderContentType === "content-1" && image.contentOpenNewTab ? '_blank' : '_self'}
+                                    >
+                                        {image.title &&
+                                            image.title.length > 0 && (
+                                                <>
+                                                    <TitleTag
+                                                        className="eb-slider-title"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: image.title,
+                                                        }}
+                                                    ></TitleTag>
+                                                </>
+                                            )}
+                                        {image.subtitle &&
+                                            image.subtitle.length > 0 && (
+                                                <ContentTag
+                                                    className="eb-slider-subtitle"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: image.subtitle,
+                                                    }}
+                                                ></ContentTag>
+                                            )}
+                                        <div className="eb-slider-button-wrapper">
+                                            {image.showButton &&
+                                                image.buttonText &&
+                                                image.buttonText.length > 0 && (
+                                                    <a
+                                                        href={
+                                                            image.buttonUrl &&
+                                                                image.isValidUrl
+                                                                ? image.buttonUrl
+                                                                : "#"
+                                                        }
+                                                        className="eb-slider-button"
+                                                        target={
+                                                            image.openNewTab
+                                                                ? "_blank"
+                                                                : "_self"
+                                                        }
+                                                        rel="noopener"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: image.buttonText,
+                                                        }}
+                                                    ></a>
+                                                )}
+
+                                            {image.showSecondButton &&
+                                                image.secondButtonText &&
+                                                image.secondButtonText.length >
+                                                0 && (
+                                                    <a
+                                                        href={
+                                                            image.secondButtonUrl &&
+                                                                image.isValidUrl
+                                                                ? image.secondButtonUrl
+                                                                : "#"
+                                                        }
+                                                        className="eb-slider-second-button"
+                                                        target={
+                                                            image.secondButtonOpenNewTab
+                                                                ? "_blank"
+                                                                : "_self"
+                                                        }
+                                                        rel="noopener"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: image.secondButtonText,
+                                                        }}
+                                                    ></a>
+                                                )}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </Slider>
+            );
+
+            const rootElement =
+                document.getElementsByClassName("eb-slider-wrapper")[0];
+            if (rootElement) {
+                const root = createRoot(rootElement);
+                root.render(<SliderComponent />);
+
+                // Handle SVG URL loading after render
+                setTimeout(() => {
+                    loadSvgIcons(rootElement);
+                }, 100);
+            }
+        }
+
+        if (version === "v2") {
+            let blockId = wrapper
+                .getAttribute("data-blockid")
+                .replaceAll("-", "_");
+            let settings = window[`${blockId}`];
+            let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
+            let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
+            let showLightbox = wrapper.getAttribute("data-lightbox");
+
+            settings.prevArrow = generateArrowHTML(arrowPrevIcon, 'prev');
+            settings.nextArrow = generateArrowHTML(arrowNextIcon, 'next');
+
+            let slickType = wrapper.querySelector(".eb-slider-init");
+
+            jQuery(slickType).slick(settings);
+
+            // Load SVG icons for v2
+            setTimeout(() => {
+                loadSvgIcons(wrapper);
+            }, 100);
+
+            if (showLightbox == "true") {
+                jQuery(slickType).slickLightbox({
+                    src: "data-src",
+                    itemSelector: ".eb-slider-item",
+                    navigateByKeyboard: true,
+                    imageMaxHeight: 0.7,
+                });
+            }
+        }
+        if (version === "v3" || version === "v4") {
+
+            let isMarquee = wrapper.classList.contains("marquee-slider");
+            let settingsData = atob(wrapper.getAttribute("data-settings"));
+            let settings = JSON.parse(settingsData);
+
+            let adaptiveHeight = settings.adaptiveHeight;
+            let arrows = settings.arrows;
+            let autoplay = settings.autoplay;
+            let dots = settings.dots;
+            let infinite = settings.infinite;
+            let pauseOnHover = settings.pauseOnHover;
+            let slideToShowRange = settings.slidesToShow;
+            let responsive = settings.responsive;
+            let autoplaySpeed = settings.autoplaySpeed;
+            let speed = settings.speed;
+            let vertical = settings.vertical;
+            let rtl = settings.rtl;
+            let fade = vertical ? false : settings.fade;
+
+            let arrowNextIcon = wrapper.getAttribute("data-arrowNextIcon");
+            let arrowPrevIcon = wrapper.getAttribute("data-arrowPrevIcon");
+            let showLightbox = wrapper.getAttribute("data-lightbox");
+
+            if (!isMarquee) {
+                let slickType = wrapper.querySelector(".eb-slider-init");
+
+                const isRTL = document.documentElement.dir === "rtl";
+
+                const $slick = jQuery(slickType);
+
+
+                $slick.slick({
+                    lazyLoad: "progressive",
+                    arrows,
+                    adaptiveHeight,
+                    autoplay,
+                    autoplaySpeed,
+                    dots,
+                    fade,
+                    infinite,
+                    pauseOnHover,
+                    slidesToShow: slideToShowRange,
+                    speed,
+                    vertical,
+                    rtl: isRTL,
+                    prevArrow: generateArrowHTML(arrowPrevIcon, 'prev'),
+                    nextArrow: generateArrowHTML(arrowNextIcon, 'next'),
+                    responsive: [...responsive],
+                    cssEase: "linear",
+                });
+
+                // Load SVG icons for v3/v4
+                setTimeout(() => {
+                    loadSvgIcons(wrapper);
+                }, 100);
+
+                // ✅ Recalculate layout when image is lazy-loaded
+                $slick.on(
+                    "lazyLoaded",
+                    function (event, slick, image, imageSource) {
+                        slick.$slider.slick("setPosition");
+
+                        // Force height recalculation for adaptiveHeight
+                        if (adaptiveHeight) {
+                            setTimeout(function () {
+                                slick.$slider.slick("setPosition");
+                            }, 50);
+                        }
+                    },
+                );
+
+                // Force height calculation after initialization for adaptiveHeight
+                if (adaptiveHeight) {
+                    setTimeout(function () {
+                        $slick.slick("setPosition");
+                    }, 100);
+                }
+
+                // Recalculate on slide change for adaptiveHeight
+                $slick.on('afterChange', function (event, slick, currentSlide) {
+                    if (adaptiveHeight) {
+                        slick.$slider.slick('setPosition');
+                    }
+                });
+
+                if (showLightbox == "true") {
+                    $slick.slickLightbox({
+                        src: "data-src",
+                        itemSelector: ".eb-slider-item",
+                        navigateByKeyboard: true,
+                        imageMaxHeight: 0.7,
+                    });
+                }
+            }
+        }
+    }
+
+    // Handle content link clicks for v2+ versions
+    function handleContentLinkClick(event) {
+        const contentElement = event.currentTarget;
+        const contentLink = contentElement.getAttribute('data-content-link');
+        const contentTarget = contentElement.getAttribute('data-content-target');
+
+        // Only handle if we have a content link and the click wasn't on a button
+        if (contentLink && !event.target.closest('.eb-slider-button-wrapper')) {
+            event.preventDefault();
+
+            if (contentTarget === '_blank') {
+                window.open(contentLink, '_blank', 'noopener,noreferrer');
+            } else {
+                window.location.href = contentLink;
+            }
+        }
+    }
+
+    // Add click handlers to all content elements with links
+    const contentElements = document.querySelectorAll('.eb-slider-content.has-content-link');
+    contentElements.forEach(function (element) {
+        element.addEventListener('click', handleContentLinkClick);
+
+        // Add keyboard support
+        element.setAttribute('tabindex', '0');
+        element.setAttribute('role', 'link');
+
+        element.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleContentLinkClick(event);
+            }
+        });
+    });
+});

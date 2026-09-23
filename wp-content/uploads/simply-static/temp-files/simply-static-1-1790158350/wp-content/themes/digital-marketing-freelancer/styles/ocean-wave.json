@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"title": "Ocean-Wave",
+	"version": 2,
+	"settings": {
+	  "color": {
+		"palette": [
+			{
+				"slug": "background",
+				"color": "#000000",
+				"name": "Background"
+			},
+			{
+				"slug": "foreground",
+				"color": "#ffffff",
+				"name": "Foreground"
+			},
+			{
+				"slug": "extra-primary",
+				"color": "#00bcd4",
+				"name": "Extra Primary"
+			},
+			{
+				"slug": "extra-secondary",
+				"color": "#00796b",
+				"name": "Extra Secondary"
+			},
+			{
+				"slug": "extra-primary-second",
+				"color": "#33aabb",
+				"name": "Extra Primary Second"
+			},
+			{
+				"slug": "extra-primary-third",
+				"color": "#00474f",
+				"name": "Extra Primary Third"
+			},
+			{
+				"slug": "primary",
+				"color": "#0d0c0c",
+				"name": "Primary"
+			},
+			{
+				"slug": "secondary",
+				"color": "#181818",
+				"name": "Secondary"
+			}
+		]
+	  }
+	}
+  }

@@ -1,0 +1,1211 @@
+/**
+ * WordPress dependencies
+ */
+import { __ } from "@wordpress/i18n";
+import { useState } from "@wordpress/element";
+import {
+    SelectControl,
+    ToggleControl,
+    RangeControl,
+    BaseControl,
+    TextControl,
+    PanelRow,
+    __experimentalDivider as Divider,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+} from "@wordpress/components";
+import { applyFilters } from "@wordpress/hooks";
+
+/**
+ * Internal dependencies
+ */
+import { addTab, deleteTab } from "./helpers";
+import {
+    BackgroundControl,
+    BorderShadowControl,
+    ColorControl,
+    ResponsiveRangeController,
+    ResponsiveDimensionsControl,
+    TypographyDropdown,
+    InspectorPanel,
+    SortControl,
+    ImageComponent,
+    MaskingPanel,
+    EBIconPicker,
+    EBTextControl,
+    ProSelectControl
+} from "@essential-blocks/controls";
+
+import {
+    prefixWrapBg,
+    prefixTitleBg,
+    prefixActTitleBg,
+    prefixContentBg,
+    prefixTtlWrpBg,
+} from "./constants/backgroundsConstants";
+
+import {
+    prefixWrapBdShadow,
+    prefixTitleBdShadow,
+    prefixActTitleBdShadow,
+    prefixContentBdShadow,
+    prefixTtlWrpBdShadow,
+    prefixIconBdShadow,
+} from "./constants/borderShadowConstants";
+
+import {
+    prefixWrapperMargin,
+    prefixWrapperPadding,
+    prefixTitlePadding,
+    prefixTitleMargin,
+    prefixContentMargin,
+    prefixContentPadding,
+    prefixTtlWrpMargin,
+    prefixTtlWrpPadding,
+    prefixIconPadding,
+} from "./constants/dimensionsConstants";
+
+import {
+    prefixTitleMinWidth,
+    prefixIconSize,
+    prefixIconGap,
+    prefixCaretSize,
+    prefixSubtitleSpacing,
+} from "./constants/rangeNames";
+
+import objAttributes from "./attributes";
+
+import {
+    //
+    typoPrefixTabTitle,
+    typoPrefixTabSubtitle,
+} from "./constants/typographyPrefixConstants";
+
+import { HEADING, VERTICALTOHORIZONTAL, TITLE_ALIGNMENTS, TAB_STYLES } from "./constants";
+
+function Inspector(props) {
+    const { attributes, setAttributes, clientId, handleTabTitleClick } = props;
+
+    const {
+        blockId,
+        tabTitles,
+        tabChildCount,
+        isMediaOn,
+        layout,
+        mediaPositon,
+        mediaAlign,
+        textColor,
+        iconColor,
+        hvTextColor,
+        hvIconColor,
+        actTextColor,
+        actIconColor,
+        actHvTextColor,
+        actHvIconColor,
+        colorTransition,
+        actColorTransition,
+        showCaret,
+        caretColor,
+        isFillTitle,
+        isMinHeightAsTitle,
+        enableResponsiveLayout,
+        verticalToHorizontal,
+        tagName,
+        closeAllTabs,
+        subtitleColor,
+        hvSubtitleColor,
+        actSubtitleColor,
+        actHvSubtitleColor,
+        iconBgColor,
+        iconhvBgColor,
+        actIconBgColor,
+        actHvIconBgColor,
+        titleAlign,
+        addCaretIcon,
+        caretIcon,
+        tabStyle,
+    } = attributes;
+
+    //
+    const [colorSwitcher, setColorSwitcher] = useState("normal");
+    const [activeColorSwitcher, setActiveColorSwitcher] = useState("normal");
+
+    const handleLayoutChange = (layout) => {
+        setAttributes({ layout });
+    };
+
+    const addNewTab = () => {
+        addTab({
+            setAttributes,
+            tabChildCount,
+            clientId,
+            tabTitles,
+            blockId,
+            handleTabTitleClick,
+        });
+    };
+
+    const onDeleteTab = (index) => {
+        deleteTab(clientId, setAttributes, tabTitles, index);
+    };
+
+    const getTabsComponents = () => {
+        const onTabChange = (key, value, position) => {
+            const newFeature = { ...attributes.tabTitles[position] };
+            const newFeatureList = [...attributes.tabTitles];
+            newFeatureList[position] = newFeature;
+
+            if (Array.isArray(key)) {
+                key.map((item, index) => {
+                    newFeatureList[position][item] = value[index];
+                });
+            } else {
+                newFeatureList[position][key] = value;
+            }
+
+            setAttributes({ tabTitles: newFeatureList });
+        };
+
+        const handleDefaultActive = (id) => {
+
+            const newTabTitlesUpdate = attributes.tabTitles.map((item) => ({
+                ...item,
+                isDefault: item.id === id,
+            }));
+
+            setAttributes({ tabTitles: newTabTitlesUpdate });
+        };
+
+        return attributes.tabTitles.map((each, i) => (
+            <div key={i}>
+                <ToggleControl
+                    label={__("Active Initially", "essential-blocks")}
+                    checked={each.isDefault || false}
+                    onChange={() => {
+                        handleDefaultActive(each.id);
+                    }}
+                    __nextHasNoMarginBottom
+                />
+
+                <ToggleGroupControl
+
+                    value={each.media}
+                    onChange={(value) => {
+                        onTabChange("media", value, i);
+                    }}
+                    isBlock
+__next40pxDefaultSize
+__nextHasNoMarginBottom
+                >
+                    {[
+                        {
+                            label: __("None", "essential-blocks"),
+                            value: "none",
+                        },
+                        {
+                            label: __("Icon", "essential-blocks"),
+                            value: "icon",
+                        },
+                        {
+                            label: __("Image", "essential-blocks"),
+                            value: "image",
+                        },
+                    ].map((item, index) => (
+                        <ToggleGroupControlOption
+                            key={index}
+                            value={item.value}
+                            label={item.label}
+                        />
+                    ))}
+                </ToggleGroupControl>
+
+                {each.media === "icon" && (
+                    <div>
+                        <label>Icon</label>
+                        <EBIconPicker
+                            value={each.icon}
+                            onChange={(value) => onTabChange("icon", value, i)}
+                            title={""}
+                        />
+                    </div>
+                )}
+
+                {each.media === "image" && (
+                    <ImageComponent.GeneralTab
+                        onSelect={({ id, url }) => { onTabChange(["imgId", "imgUrl"], [id, url], i) }}
+                        onRemove={() => { onTabChange(["imgId", "imgUrl"], [null, ""], i) }}
+                        value={each.imgUrl}
+                        hasTag={false}
+                        hasCaption={false}
+                        hasStyle={false}
+                        hasLink={false}
+                        showInPanel={false}
+                    />
+                )}
+                <TextControl
+                    label={__("Custom ID", "essential-blocks")}
+                    value={each.customId}
+                    onChange={(value) => onTabChange("customId", value, i)}
+                    help={__(
+                        "Custom ID will be added as an anchor tag. For example, if you add ‘test’ as your custom ID, the link will become like the following: https://www.example.com/#test and it will open the respective tab directly.",
+                        "essential-blocks",
+                    )}
+                    __next40pxDefaultSize
+                    __nextHasNoMarginBottom
+                />
+
+                <ToggleControl
+                    label={__("Enable Subtitle", "essential-blocks")}
+                    checked={each.enableSubtitle || false}
+                    onChange={(value) => onTabChange("enableSubtitle", value, i)}
+                    __nextHasNoMarginBottom
+                />
+
+                {each.enableSubtitle && (
+                    <EBTextControl
+                        label={__("Subtitle", "essential-blocks")}
+                        value={each.subtitle || ""}
+                        onChange={(value) => onTabChange("subtitle", value, i)}
+                        placeholder={__("Enter subtitle text...", "essential-blocks")}
+                        enableAi={true}
+                        aiContentType="text"
+                    />
+                )}
+            </div>
+        ));
+    };
+
+    return (
+        <>
+            <InspectorPanel
+                advancedControlProps={{
+                    marginPrefix: prefixWrapperMargin,
+                    paddingPrefix: prefixWrapperPadding,
+                    backgroundPrefix: prefixWrapBg,
+                    borderPrefix: prefixWrapBdShadow,
+                    hasMargin: true,
+                }}
+            >
+                <InspectorPanel.General>
+                    <InspectorPanel.PanelBody
+                        title={__("Tabs List", "essential-blocks")}
+                        initialOpen={true}
+                    >
+                        <SortControl
+                            items={attributes.tabTitles}
+                            labelKey={"text"}
+                            onSortEnd={(tabTitles) =>
+                                setAttributes({ tabTitles })
+                            }
+                            onDeleteItem={(index) => onDeleteTab(index)}
+                            hasSettings={true}
+                            settingsComponents={getTabsComponents()}
+                            hasAddButton={true}
+                            onAddItem={addNewTab}
+                            addButtonText={__("Add Tab", "essential-blocks")}
+                        ></SortControl>
+                    </InspectorPanel.PanelBody>
+                    <InspectorPanel.PanelBody
+                        title={__("Tabs Settings", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <ProSelectControl
+                            label={__("Tabs Style", "essential-blocks")}
+                            value={tabStyle}
+                            options={TAB_STYLES}
+                            onChange={(tabStyle) => setAttributes({ tabStyle })}
+                        />
+
+                        <ToggleGroupControl
+                            label={__("Title Level", "essential-blocks")}
+                            value={tagName}
+                            onChange={(value) =>
+                                setAttributes({
+                                    tagName: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {HEADING.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+                        <SelectControl
+                            label={__("Tabs Layout", "essential-blocks")}
+                            value={layout}
+                            options={[
+                                {
+                                    label: __("Horizontal", "essential-blocks"),
+                                    value: "horizontal",
+                                },
+                                {
+                                    label: __("Vertical", "essential-blocks"),
+                                    value: "vertical",
+                                },
+                            ]}
+                            onChange={(layout) => handleLayoutChange(layout)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        />
+
+                        {layout === "horizontal" && (
+                            <>
+                                <ToggleControl
+                                    label={__(
+                                        "Fill Titles' Wrapper",
+                                        "essential-blocks",
+                                    )}
+                                    checked={isFillTitle}
+                                    onChange={() =>
+                                        setAttributes({
+                                            isFillTitle: !isFillTitle,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+                            </>
+                        )}
+
+                        {layout === "vertical" && (
+                            <>
+                                <ToggleControl
+                                    label={__(
+                                        "Enable Responsive Layout",
+                                        "essential-blocks",
+                                    )}
+                                    checked={enableResponsiveLayout}
+                                    onChange={() =>
+                                        setAttributes({
+                                            enableResponsiveLayout:
+                                                !enableResponsiveLayout,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+                                <PanelRow className="eb-instruction">
+                                    <strong>Note:</strong> Enable this option to
+                                    switch the layout from vertical to
+                                    horizontal on responsive devices.
+                                </PanelRow>
+                                {enableResponsiveLayout && (
+                                    <ToggleGroupControl
+                                        label={__(
+                                            "Select Devices for Horizontal Layout",
+                                            "essential-blocks",
+                                        )}
+                                        value={verticalToHorizontal}
+                                        onChange={(value) =>
+                                            setAttributes({
+                                                verticalToHorizontal:
+                                                    value,
+                                            })
+                                        }
+                                        isBlock
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    >
+                                        {VERTICALTOHORIZONTAL.map(
+                                            (item, key) => (
+                                                <ToggleGroupControlOption
+                                                    key={key}
+                                                    value={item.value}
+                                                    label={item.label}
+                                                />
+                                            ),
+                                        )}
+                                    </ToggleGroupControl>
+                                )}
+                                <ToggleControl
+                                    label={__(
+                                        "Minimum Height Based on Tabs Heading Panel",
+                                        "essential-blocks",
+                                    )}
+                                    checked={isMinHeightAsTitle}
+                                    onChange={() =>
+                                        setAttributes({
+                                            isMinHeightAsTitle:
+                                                !isMinHeightAsTitle,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+                                <PanelRow className="eb-instruction">
+                                    <strong>Note:</strong> When enabled, the tab
+                                    content will have a minimum height equal to
+                                    the height of the heading panel.
+                                </PanelRow>
+                            </>
+                        )}
+
+                        <ToggleControl
+                            label={__("Enable Icon", "essential-blocks")}
+                            checked={isMediaOn}
+                            onChange={() =>
+                                setAttributes({
+                                    isMediaOn: !isMediaOn,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+                        <ToggleControl
+                            label={__(
+                                "Close All Tabs Initially",
+                                "essential-blocks",
+                            )}
+                            checked={closeAllTabs}
+                            onChange={() =>
+                                setAttributes({
+                                    closeAllTabs: !closeAllTabs,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+                        {isMediaOn && (
+                            <>
+                                <SelectControl
+                                    label={__(
+                                        "Icon Layout",
+                                        "essential-blocks",
+                                    )}
+                                    value={mediaPositon}
+                                    options={[
+                                        {
+                                            label: __(
+                                                "Stacked",
+                                                "essential-blocks",
+                                            ),
+                                            value: "stacked",
+                                        },
+                                        {
+                                            label: __(
+                                                "Inline",
+                                                "essential-blocks",
+                                            ),
+                                            value: "inline",
+                                        },
+                                    ]}
+                                    onChange={(mediaPositon) =>
+                                        setAttributes({
+                                            mediaPositon,
+                                        })
+                                    }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                />
+                                {mediaPositon === "inline" && (
+                                    <>
+                                        <ToggleGroupControl
+                                            label={__("Icon Position", "essential-blocks")}
+                                            value={mediaAlign}
+                                            onChange={(value) =>
+                                                setAttributes({
+                                                    mediaAlign:
+                                                        value,
+                                                })
+                                            }
+                                            isBlock
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
+                                        >
+                                            <ToggleGroupControlOption value="left" label={__("Left", "essential-blocks")} />
+                                            <ToggleGroupControlOption value="right" label={__("Right", "essential-blocks")} />
+                                        </ToggleGroupControl>
+
+                                        <label
+                                            style={{
+                                                display: "block",
+                                            }}
+                                        >
+                                            <i>
+                                                {__(
+                                                    "Set icon position before / after the tab title.",
+                                                    "essentail-blocks",
+                                                )}
+                                            </i>
+                                        </label>
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </InspectorPanel.PanelBody>
+
+                    {/* Block-level masking — applies to every tab nav image. */}
+                    <MaskingPanel />
+                </InspectorPanel.General>
+                <InspectorPanel.Style>
+                    {applyFilters(
+                        "eb_advanced_tabs_pro_liquid_style_tab",
+                        "",
+                        attributes,
+                        setAttributes,
+                    )}
+                    <InspectorPanel.PanelBody
+                        title={__("Tab Title", "essential-blocks")}
+                    // initialOpen={false}
+                    >
+                        <TypographyDropdown
+                            baseLabel={__("Typography", "essential-blocks")}
+                            typographyPrefixConstant={typoPrefixTabTitle}
+                        />
+
+                        <ResponsiveRangeController
+                            baseLabel={__(
+                                "Title Min Width",
+                                "essential-blocks",
+                            )}
+                            controlName={prefixTitleMinWidth}
+                            min={0}
+                            max={1000}
+                            step={1}
+                            units={[
+                                { label: "px", value: "px" },
+                                { label: "em", value: "em" },
+                                { label: "%", value: "%" },
+                            ]}
+                        />
+                        <ToggleGroupControl
+                            label={__("Alignment", "essential-blocks")}
+                            value={titleAlign}
+                            onChange={(value) =>
+                                setAttributes({
+                                    titleAlign: value,
+                                })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {TITLE_ALIGNMENTS.map((item, index) => (
+                                <ToggleGroupControlOption
+                                    key={index}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+
+                        <ResponsiveDimensionsControl
+                            controlName={prefixTitlePadding}
+                            baseLabel={__("Padding", "essential-blocks")}
+                        />
+
+                        <ResponsiveDimensionsControl
+                            controlName={prefixTitleMargin}
+                            baseLabel={__("Margin", "essential-blocks")}
+                        />
+
+                        <Divider />
+
+                        <ResponsiveRangeController
+                            baseLabel={__("Icon Size", "essential-blocks")}
+                            controlName={prefixIconSize}
+                            min={0}
+                            max={200}
+                            step={1}
+                            noUnits
+                        />
+
+                        <ResponsiveRangeController
+                            baseLabel={__("Icon Gap", "essential-blocks")}
+                            controlName={prefixIconGap}
+                            min={0}
+                            max={200}
+                            step={1}
+                            noUnits
+                        />
+                        <ResponsiveDimensionsControl
+                            controlName={prefixIconPadding}
+                            baseLabel={__("Icon Padding", "essential-blocks")}
+                        />
+
+                        <InspectorPanel.PanelBody
+                            title={__("Colors", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={colorSwitcher}
+                                onChange={(value) => setColorSwitcher(value)}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOption value="normal" label={__("Normal", "essential-blocks")} />
+                                <ToggleGroupControlOption value="hover" label={__("Hover", "essential-blocks")} />
+                            </ToggleGroupControl>
+
+                            {colorSwitcher === "normal" && (
+                                <>
+                                    <ColorControl
+                                        label={__("Text", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.textColor.default
+                                        }
+                                        color={textColor}
+                                        onChange={(textColor) =>
+                                            setAttributes({
+                                                textColor,
+                                            })
+                                        }
+                                    />
+
+                                    <ColorControl
+                                        label={__("Icon", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.iconColor.default
+                                        }
+                                        color={iconColor}
+                                        onChange={(iconColor) =>
+                                            setAttributes({
+                                                iconColor,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Icon Background", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.iconBgColor.default
+                                        }
+                                        color={iconBgColor}
+                                        onChange={(iconBgColor) =>
+                                            setAttributes({
+                                                iconBgColor,
+                                            })
+                                        }
+                                    />
+                                </>
+                            )}
+
+                            {colorSwitcher === "hover" && (
+                                <>
+                                    <ColorControl
+                                        label={__("Text", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.hvTextColor.default
+                                        }
+                                        color={hvTextColor}
+                                        onChange={(hvTextColor) =>
+                                            setAttributes({
+                                                hvTextColor,
+                                            })
+                                        }
+                                    />
+
+                                    <ColorControl
+                                        label={__("Icon", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.hvIconColor.default
+                                        }
+                                        color={hvIconColor}
+                                        onChange={(hvIconColor) =>
+                                            setAttributes({
+                                                hvIconColor,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Icon Background", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.iconhvBgColor.default
+                                        }
+                                        color={iconhvBgColor}
+                                        onChange={(iconhvBgColor) =>
+                                            setAttributes({
+                                                iconhvBgColor,
+                                            })
+                                        }
+                                    />
+
+                                    <RangeControl
+                                        value={colorTransition}
+                                        onChange={(colorTransition) =>
+                                            setAttributes({
+                                                colorTransition,
+                                            })
+                                        }
+                                        step={0.1}
+                                        min={0}
+                                        max={5}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
+                                    />
+                                </>
+                            )}
+                        </InspectorPanel.PanelBody>
+
+                        <InspectorPanel.PanelBody
+                            title={__("Background", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <BackgroundControl
+                                controlName={prefixTitleBg}
+                                noOverlay
+                            // noMainBgi
+                            // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                            />
+                        </InspectorPanel.PanelBody>
+
+                        <InspectorPanel.PanelBody
+                            title={__("Border & Shadow")}
+                            initialOpen={false}
+                        >
+                            <BorderShadowControl
+                                controlName={prefixTitleBdShadow}
+                            // noShadow
+                            // noBorder
+                            />
+                        </InspectorPanel.PanelBody>
+
+                        <InspectorPanel.PanelBody
+                            title={__("Active Colors", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <ToggleGroupControl
+                                label=""
+                                hideLabelFromVision
+                                value={activeColorSwitcher}
+                                onChange={(value) => setActiveColorSwitcher(value)}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOption value="normal" label={__("Normal", "essential-blocks")} />
+                                <ToggleGroupControlOption value="hover" label={__("Hover", "essential-blocks")} />
+                            </ToggleGroupControl>
+
+                            {activeColorSwitcher === "normal" && (
+                                <>
+                                    <ColorControl
+                                        label={__("Text", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.actTextColor.default
+                                        }
+                                        color={actTextColor}
+                                        onChange={(actTextColor) =>
+                                            setAttributes({
+                                                actTextColor,
+                                            })
+                                        }
+                                    />
+
+                                    <ColorControl
+                                        label={__("Icon", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.actIconColor.default
+                                        }
+                                        color={actIconColor}
+                                        onChange={(actIconColor) =>
+                                            setAttributes({
+                                                actIconColor,
+                                            })
+                                        }
+                                    />
+                                    <ColorControl
+                                        label={__("Icon Background", "essential-blocks")}
+                                        defaultColor={
+                                            objAttributes.actIconBgColor.default
+                                        }
+                                        color={actIconBgColor}
+                                        onChange={(actIconBgColor) =>
+                                            setAttributes({
+                                                actIconBgColor,
+                                            })
+                                        }
+                                    />
+                                </>
+                            )}
+
+                        {activeColorSwitcher === "hover" && (
+                            <>
+                                <ColorControl
+                                    label={__("Text", "essential-blocks")}
+                                    defaultColor={
+                                        objAttributes.actHvTextColor.default
+                                    }
+                                    color={actHvTextColor}
+                                    onChange={(actHvTextColor) =>
+                                        setAttributes({
+                                            actHvTextColor,
+                                        })
+                                    }
+                                />
+
+                                <ColorControl
+                                    label={__("Icon", "essential-blocks")}
+                                    defaultColor={
+                                        objAttributes.actHvIconColor.default
+                                    }
+                                    color={actHvIconColor}
+                                    onChange={(actHvIconColor) =>
+                                        setAttributes({
+                                            actHvIconColor,
+                                        })
+                                    }
+                                />
+                                <ColorControl
+                                    label={__("Icon Background", "essential-blocks")}
+                                    defaultColor={
+                                        objAttributes.actHvIconBgColor.default
+                                    }
+                                    color={actHvIconBgColor}
+                                    onChange={(actHvIconBgColor) =>
+                                        setAttributes({
+                                            actHvIconBgColor,
+                                        })
+                                    }
+                                />
+
+                                <BaseControl
+                                    label={__(
+                                        "Transition",
+                                        "essential-blocks",
+                                    )}
+                                    __nextHasNoMarginBottom
+                                >
+                                    <RangeControl
+                                        value={actColorTransition}
+                                        onChange={(actColorTransition) =>
+                                            setAttributes({
+                                                actColorTransition,
+                                            })
+                                        }
+                                        step={0.1}
+                                        min={0}
+                                        max={5}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
+                                    />
+                                </BaseControl>
+                            </>
+                        )}
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__("Active Background", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <BackgroundControl
+                            controlName={prefixActTitleBg}
+                            noOverlay
+                        // noMainBgi
+                        // noOverlayBgi // if U pass 'noOverlay' prop U don't need to pass 'noOverlayBgi'
+                        />
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__(
+                            "Active Border & Shadow",
+                            "essential-blocks",
+                        )}
+                        initialOpen={false}
+                    >
+                        <BorderShadowControl
+                            controlName={prefixActTitleBdShadow}
+                        // noShadow
+                        // noBorder
+                        />
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__("Icon Border", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <BorderShadowControl
+                            controlName={prefixIconBdShadow}
+                        // noShadow
+                        // noBorder
+                        />
+                    </InspectorPanel.PanelBody>
+                </InspectorPanel.PanelBody>
+                <InspectorPanel.PanelBody
+                    title={__("Tab Subtitle", "essential-blocks")}
+                    initialOpen={false}
+                >
+                    <TypographyDropdown
+                        baseLabel={__("Typography", "essential-blocks")}
+                        typographyPrefixConstant={typoPrefixTabSubtitle}
+                    />
+
+                    <ResponsiveRangeController
+                        baseLabel={__(
+                            "Subtitle Top Spacing",
+                            "essential-blocks",
+                        )}
+                        controlName={prefixSubtitleSpacing}
+                        min={0}
+                        max={100}
+                        step={1}
+                        noUnits
+                    />
+
+                    <InspectorPanel.PanelBody
+                        title={__("Colors", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <ToggleGroupControl
+                            label=""
+                            hideLabelFromVision
+                            value={colorSwitcher}
+                            onChange={(value) => setColorSwitcher(value)}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            <ToggleGroupControlOption value="normal" label={__("Normal", "essential-blocks")} />
+                            <ToggleGroupControlOption value="hover" label={__("Hover", "essential-blocks")} />
+                        </ToggleGroupControl>
+
+                        {colorSwitcher === "normal" && (
+                            <ColorControl
+                                label={__("Subtitle", "essential-blocks")}
+                                defaultColor={
+                                    objAttributes.subtitleColor.default
+                                }
+                                color={subtitleColor}
+                                onChange={(subtitleColor) =>
+                                    setAttributes({
+                                        subtitleColor,
+                                    })
+                                }
+                            />
+                        )}
+
+                        {colorSwitcher === "hover" && (
+                            <ColorControl
+                                label={__("Subtitle", "essential-blocks")}
+                                defaultColor={
+                                    objAttributes.hvSubtitleColor.default
+                                }
+                                color={hvSubtitleColor}
+                                onChange={(hvSubtitleColor) =>
+                                    setAttributes({
+                                        hvSubtitleColor,
+                                    })
+                                }
+                            />
+                        )}
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__("Active Colors", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <ToggleGroupControl
+                            label=""
+                            hideLabelFromVision
+                            value={activeColorSwitcher}
+                            onChange={(value) => setActiveColorSwitcher(value)}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            <ToggleGroupControlOption value="normal" label={__("Normal", "essential-blocks")} />
+                            <ToggleGroupControlOption value="hover" label={__("Hover", "essential-blocks")} />
+                        </ToggleGroupControl>
+
+                        {activeColorSwitcher === "normal" && (
+                            <ColorControl
+                                label={__("Subtitle", "essential-blocks")}
+                                defaultColor={
+                                    objAttributes.actSubtitleColor.default
+                                }
+                                color={actSubtitleColor}
+                                onChange={(actSubtitleColor) =>
+                                    setAttributes({
+                                        actSubtitleColor,
+                                    })
+                                }
+                            />
+                        )}
+
+                        {activeColorSwitcher === "hover" && (
+                            <ColorControl
+                                label={__("Subtitle", "essential-blocks")}
+                                defaultColor={
+                                    objAttributes.actHvSubtitleColor.default
+                                }
+                                color={actHvSubtitleColor}
+                                onChange={(actHvSubtitleColor) =>
+                                    setAttributes({
+                                        actHvSubtitleColor,
+                                    })
+                                }
+                            />
+                        )}
+                    </InspectorPanel.PanelBody>
+                </InspectorPanel.PanelBody>
+
+                {tabStyle !== 'liquid-glass' && (
+                    <InspectorPanel.PanelBody
+                        title={__("Tab Titles' Wrapper", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <InspectorPanel.PanelBody
+                            title={__("Margin Padding", "essential-blocks")}
+                        >
+                            <ResponsiveDimensionsControl
+                                controlName={prefixTtlWrpMargin}
+                                baseLabel={__("Margin", "essential-blocks")}
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={prefixTtlWrpPadding}
+                                baseLabel={__("Padding", "essential-blocks")}
+                            />
+                        </InspectorPanel.PanelBody>
+
+                        <InspectorPanel.PanelBody
+                            title={__("Background", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <BackgroundControl
+                                controlName={prefixTtlWrpBg}
+                                noOverlay
+                            />
+                        </InspectorPanel.PanelBody>
+
+                        <InspectorPanel.PanelBody
+                            title={__("Border & Shadow", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <BorderShadowControl
+                                controlName={prefixTtlWrpBdShadow}
+                            />
+                        </InspectorPanel.PanelBody>
+                    </InspectorPanel.PanelBody>
+                )}
+
+                <InspectorPanel.PanelBody
+                    title={__("Content", "essential-blocks")}
+                    initialOpen={false}
+                >
+                    <InspectorPanel.PanelBody
+                        title={__("Margin Padding", "essential-blocks")}
+                    >
+                        <ResponsiveDimensionsControl
+                            controlName={prefixContentMargin}
+                            baseLabel={__("Margin", "essential-blocks")}
+                        />
+                        <ResponsiveDimensionsControl
+                            controlName={prefixContentPadding}
+                            baseLabel={__("Padding", "essential-blocks")}
+                        />
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__("Background", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <BackgroundControl
+                            controlName={prefixContentBg}
+                            noOverlay
+                        />
+                    </InspectorPanel.PanelBody>
+
+                    {tabStyle !== 'liquid-glass' && (
+                        <InspectorPanel.PanelBody
+                            title={__("Border & Shadow", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <BorderShadowControl
+                                controlName={prefixContentBdShadow}
+                            />
+                        </InspectorPanel.PanelBody>
+                    )}
+                </InspectorPanel.PanelBody>
+
+                {tabStyle !== 'liquid-glass' && (
+                    <InspectorPanel.PanelBody
+                        title={__("Caret", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <ToggleControl
+                            label={__(
+                                "Show Caret on Active Tab",
+                                "essential-blocks",
+                            )}
+                            checked={showCaret}
+                            onChange={() =>
+                                setAttributes({
+                                    showCaret: !showCaret,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+
+
+
+                        {showCaret && (
+                            <>
+                                <ToggleControl
+                                    label={__(
+                                        "Add Caret Icon",
+                                        "essential-blocks",
+                                    )}
+                                    checked={addCaretIcon}
+                                    onChange={() =>
+                                        setAttributes({
+                                            addCaretIcon: !addCaretIcon,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+                                {addCaretIcon && (
+                                    <EBIconPicker
+                                        value={caretIcon}
+                                        onChange={(caretIcon) =>
+                                            setAttributes({
+                                                caretIcon,
+                                            })
+                                        }
+                                        title={__(
+                                            "Caret Icon",
+                                            "essential-blocks",
+                                        )}
+                                    />
+                                )}
+                                <Divider />
+
+                                <ResponsiveRangeController
+                                    baseLabel={__(
+                                        "Caret Size",
+                                        "essential-blocks",
+                                    )}
+                                    controlName={prefixCaretSize}
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                    noUnits
+                                />
+
+                                <ColorControl
+                                    label={__(
+                                        "Caret Color",
+                                        "essential-blocks",
+                                    )}
+                                    defaultColor={
+                                        objAttributes.caretColor.default
+                                    }
+                                    color={caretColor}
+                                    onChange={(caretColor) =>
+                                        setAttributes({
+                                            caretColor,
+                                        })
+                                    }
+                                />
+                            </>
+                        )}
+                    </InspectorPanel.PanelBody>
+                )}
+            </InspectorPanel.Style>
+        </InspectorPanel >
+        </>
+    );
+}
+export default Inspector;
