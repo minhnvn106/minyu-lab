@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'betterlinks/mcp-runtime',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => 'ebf8be1dae23b2ec2e74d1fdf6d98ed61269a9d0',
+        'type' => 'project',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
+    ),
+    'versions' => array(
+        'automattic/jetpack-autoloader' => array(
+            'pretty_version' => 'v5.0.22',
+            'version' => '5.0.22.0',
+            'reference' => '9c7627e832db897ebed54c0cb575eb089ab8d08a',
+            'type' => 'composer-plugin',
+            'install_path' => __DIR__ . '/../automattic/jetpack-autoloader',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'betterlinks/mcp-runtime' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'ebf8be1dae23b2ec2e74d1fdf6d98ed61269a9d0',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'wordpress/abilities-api' => array(
+            'pretty_version' => 'v0.4.0',
+            'version' => '0.4.0.0',
+            'reference' => '0759075aed37c4247adbf273bdebec096d52e825',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../wordpress/abilities-api',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);

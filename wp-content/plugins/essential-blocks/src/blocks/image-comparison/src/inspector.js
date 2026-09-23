@@ -1,0 +1,292 @@
+/**
+ * WordPress dependencies
+ */
+import { __ } from "@wordpress/i18n";
+import {
+    ToggleControl,
+    RangeControl,
+    TextControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+} from "@wordpress/components";
+
+/**
+ * Internal dependencies
+ */
+import objAttributes from "./attributes";
+
+import {
+    ResetControl,
+    ColorControl,
+    ResponsiveRangeController,
+    ResponsiveDimensionsControl,
+    TypographyDropdown,
+    InspectorPanel,
+    ImageComponent,
+} from "@essential-blocks/controls";
+
+const leftImageProps  = { imageUrl: "leftImageURL" };
+const rightImageProps = { imageUrl: "rightImageURL" };
+
+import {
+    CONTENT_POSITION,
+    IMAGE_WIDTH,
+    WRAPPER_PADDING,
+    WRAPPER_MARGIN,
+    LABEL_PADDING,
+    HORIZONTAL_LABEL_POSITION,
+    VERTICAL_LABEL_POSITION,
+} from "./constants";
+import { typoPrefix_label } from "./constants/typographyConstants";
+
+const Inspector = ({ attributes, setAttributes, onImageSwap }) => {
+    const {
+        resOption,
+        hover,
+        verticalMode,
+        showLabels,
+        beforeLabel,
+        afterLabel,
+        fullWidth,
+        position,
+        swap,
+        lineWidth,
+        lineColor,
+        contentPosition,
+        horizontalLabelPosition,
+        verticalLabelPosition,
+        noHandle,
+        labelColor,
+        labelBackgroundColor,
+    } = attributes;
+
+    return (
+        <InspectorPanel advancedControlProps={{
+            marginPrefix: WRAPPER_MARGIN,
+            paddingPrefix: WRAPPER_PADDING,
+            hasMargin: true,
+            hasPadding: true,
+            hasBackground: false,
+            hasBorder: false
+        }}>
+            <InspectorPanel.General>
+                <InspectorPanel.PanelBody
+                    title={__("General Settings", "essential-blocks")}
+                    initialOpen={true}
+                >
+                    <>
+                        <ImageComponent.GeneralTab
+                            attrPrefix="left"
+                            imageAttrProps={leftImageProps}
+                            label={__("Left Image", "essential-blocks")}
+                            hasTag={false}
+                            hasCaption={false}
+                            hasStyle={false}
+                            hasLink={false}
+                            useImageAlign={false}
+                            hasAltText={true}
+                        />
+                        <ImageComponent.GeneralTab
+                            attrPrefix="right"
+                            imageAttrProps={rightImageProps}
+                            label={__("Right Image", "essential-blocks")}
+                            hasTag={false}
+                            hasCaption={false}
+                            hasStyle={false}
+                            hasLink={false}
+                            useImageAlign={false}
+                            hasAltText={true}
+                        />
+                    </>
+                    <ToggleGroupControl
+                        label={__("Alignment", "essential-blocks")}
+                        value={contentPosition}
+                        onChange={(value) => setAttributes({ contentPosition: value })}
+                        isBlock
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    >
+                        {CONTENT_POSITION.map((item, index) => (
+                            <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                        ))}
+                    </ToggleGroupControl>
+                    <ToggleControl
+                        label={__("Full Width", "essential-blocks")}
+                        checked={fullWidth}
+                        onChange={() => setAttributes({ fullWidth: !fullWidth })}
+                        __nextHasNoMarginBottom
+                    />
+                    {!fullWidth && (
+                        <>
+                            <ResponsiveRangeController
+                                baseLabel={__("Image Width", "essential-blocks")}
+                                controlName={IMAGE_WIDTH}
+                                min={0}
+                                max={1000}
+                                step={1}
+                                noUnits
+                            />
+                        </>
+                    )}
+                    <ToggleControl
+                        label={__("Move on Hover", "essential-blocks")}
+                        checked={hover}
+                        onChange={() => setAttributes({ hover: !hover })}
+                        __nextHasNoMarginBottom
+                    />
+                    <ToggleControl
+                        label={__("Vertical Mode", "essential-blocks")}
+                        checked={verticalMode}
+                        onChange={() =>
+                            setAttributes({ verticalMode: !verticalMode })
+                        }
+                        __nextHasNoMarginBottom
+                    />
+                    <ToggleControl
+                        label={__("Show Labels", "essential-blocks")}
+                        checked={showLabels}
+                        onChange={() =>
+                            setAttributes({ showLabels: !showLabels })
+                        }
+                        __nextHasNoMarginBottom
+                    />
+                    {showLabels && (
+                        <>
+                            <TextControl
+                                label={__("Before Label", "essential-blocks")}
+                                value={beforeLabel}
+                                onChange={(beforeLabel) =>
+                                    setAttributes({ beforeLabel })
+                                }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+                            <TextControl
+                                label={__("After Label", "essential-blocks")}
+                                value={afterLabel}
+                                onChange={(afterLabel) =>
+                                    setAttributes({ afterLabel })
+                                }
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+                            {verticalMode && (
+                                <ToggleGroupControl
+                                    label={__("Label Position", "essential-blocks")}
+                                    value={verticalLabelPosition}
+                                    onChange={(value) => setAttributes({ verticalLabelPosition: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {VERTICAL_LABEL_POSITION.map((item, index) => (
+                                        <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
+                            )}
+                            {!verticalMode && (
+                                <ToggleGroupControl
+                                    label={__("Label Position", "essential-blocks")}
+                                    value={horizontalLabelPosition}
+                                    onChange={(value) => setAttributes({ horizontalLabelPosition: value })}
+                                    isBlock
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {HORIZONTAL_LABEL_POSITION.map((item, index) => (
+                                        <ToggleGroupControlOption key={index} value={item.value} label={item.label} />
+                                    ))}
+                                </ToggleGroupControl>
+                            )}
+                        </>
+                    )}
+                    <ToggleControl
+                        label={__("Swap Images", "essential-blocks")}
+                        checked={swap}
+                        onChange={() => onImageSwap()}
+                        __nextHasNoMarginBottom
+                    />
+                    <ToggleControl
+                        label={__("No Handle", "essential-blocks")}
+                        checked={noHandle}
+                        onChange={() => setAttributes({ noHandle: !noHandle })}
+                        __nextHasNoMarginBottom
+                    />
+                    <ResetControl
+                        onReset={() =>
+                            setAttributes({
+                                position: objAttributes.position.default,
+                            })
+                        }
+                    >
+                        <RangeControl
+                            label={__("Slider Position", "essential-blocks")}
+                            value={position}
+                            onChange={(position) => setAttributes({ position })}
+                            min={0}
+                            max={100}
+                            help={__(
+                                "Update & reload to see effect in backend",
+                                "image-comparison"
+                            )}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
+                        />
+                    </ResetControl>
+                    <ResetControl
+                        onReset={() =>
+                            setAttributes({
+                                lineWidth: objAttributes.lineWidth.default,
+                            })
+                        }
+                    >
+                        <RangeControl
+                            label={__("Slider Line Width", "essential-blocks")}
+                            value={lineWidth}
+                            onChange={(lineWidth) => setAttributes({ lineWidth })}
+                            min={0}
+                            max={10}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
+                        />
+                    </ResetControl>
+                </InspectorPanel.PanelBody>
+            </InspectorPanel.General>
+            <InspectorPanel.Style>
+                <>
+                    <InspectorPanel.PanelBody initialOpen={true}>
+                        <ColorControl
+                            label={__("Line Color", "essential-blocks")}
+                            color={lineColor}
+                            attributeName={'lineColor'}
+                        />
+                    </InspectorPanel.PanelBody>
+                    {showLabels && (
+                        <InspectorPanel.PanelBody title={__("Labels", "essential-blocks")}>
+                            <TypographyDropdown
+                                baseLabel={__("Typography", "essential-blocks")}
+                                typographyPrefixConstant={typoPrefix_label}
+                            />
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={labelColor}
+                                attributeName={'labelColor'}
+                            />
+                            <ColorControl
+                                label={__("Background Color", "essential-blocks")}
+                                color={labelBackgroundColor}
+                                attributeName={'labelBackgroundColor'}
+                            />
+                            <ResponsiveDimensionsControl
+                                controlName={LABEL_PADDING}
+                                baseLabel={__("Padding", "essential-blocks")}
+                            />
+                        </InspectorPanel.PanelBody>
+                    )}
+                </>
+            </InspectorPanel.Style>
+        </InspectorPanel>
+    );
+};
+
+export default Inspector;

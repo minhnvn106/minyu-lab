@@ -1,0 +1,673 @@
+<?php
+namespace Templately\Core;
+
+use Exception;
+use PriyoMukul\WPNotice\Notices;
+use PriyoMukul\WPNotice\Utils\CacheBank;
+use PriyoMukul\WPNotice\Utils\NoticeRemover;
+use Templately\API\Login;
+use Templately\Core\Importer\FullSiteImport;
+use Templately\Utils\Base;
+use Templately\Utils\Helper;
+use Templately\Utils\Options;
+use Templately\Core\Platform\Elementor;
+use Templately\Core\Platform\Gutenberg;
+
+class Admin extends Base {
+
+	/**
+	 * @var CacheBank
+	 */
+	private static $cache_bank;
+
+	/**
+	 * Initially invoked function.
+	 * Menu, Assets and maybe redirect on plugin activation is initialized.
+	 */
+	public function __construct() {
+		add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ] );
+		add_action( 'load-toplevel_page_templately', [ $this, 'before_scripts' ] );
+		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+
+		self::$cache_bank = CacheBank::get_instance();
+
+		try {
+			add_action( 'admin_init', [ $this, 'notices' ], 11 );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+
+		add_filter( 'plugin_action_links_' . TEMPLATELY_PLUGIN_BASENAME, [$this, 'handleActionLinks'], 10, 2 );
+
+		add_action( 'admin_footer', [$this, 'my_custom_footer_html'] );
+
+		// Remove OLD notice from 1.0.0 (if other WPDeveloper plugin has notice)
+		NoticeRemover::get_instance( '1.0.0' );
+	}
+
+	public function register_post_type() {
+		$labels = [
+			'name'                  => _x( 'Theme Builders', 'Post type general name', 'templately' ),
+			'singular_name'         => _x( 'Theme Builder', 'Post type singular name', 'templately' ),
+			'menu_name'             => _x( 'Theme Builder', 'Admin Menu text', 'templately' ),
+			'name_admin_bar'        => _x( 'Book', 'Add New on Toolbar', 'templately' ),
+			'add_new'               => __( 'Add New', 'templately' ),
+			'add_new_item'          => __( 'Add New Template', 'templately' ),
+			'new_item'              => __( 'New Template', 'templately' ),
+			'edit_item'             => __( 'Edit Template', 'templately' ),
+			'view_item'             => __( 'View Template', 'templately' ),
+			'all_items'             => __( 'All Templates', 'templately' ),
+			'search_items'          => __( 'Search Templates', 'templately' ),
+			'parent_item_colon'     => __( 'Parent Templates:', 'templately' ),
+			'not_found'             => __( 'No templates found.', 'templately' ),
+			'not_found_in_trash'    => __( 'No templates found in Trash.', 'templately' ),
+			'featured_image'        => _x( 'Template Cover Image', 'Overrides the “Featured Image” phrase for this post type. Added in 4.3', 'templately' ),
+			'set_featured_image'    => _x( 'Set cover image', 'Overrides the “Set featured image” phrase for this post type. Added in 4.3', 'templately' ),
+			'remove_featured_image' => _x( 'Remove cover image', 'Overrides the “Remove featured image” phrase for this post type. Added in 4.3', 'templately' ),
+			'use_featured_image'    => _x( 'Use as cover image', 'Overrides the “Use as featured image” phrase for this post type. Added in 4.3', 'templately' ),
+			'archives'              => _x( 'Template archives', 'The post type archive label used in nav menus. Default “Post Archives”. Added in 4.4', 'templately' ),
+			'insert_into_item'      => _x( /** @lang text */ "Insert Into Theme Builder", 'Overrides the “Insert into post”/”Insert into page” phrase (used when inserting media into a post). Added in 4.4', 'templately' ),
+			'uploaded_to_this_item' => _x( 'Uploaded to this template', 'Overrides the “Uploaded to this post”/”Uploaded to this page” phrase (used when viewing media attached to a post). Added in 4.4', 'templately' ),
+			'filter_items_list'     => _x( 'Filter templates list', 'Screen reader text for the filter links heading on the post type listing screen. Default “Filter posts list”/”Filter pages list”. Added in 4.4', 'templately' ),
+			'items_list_navigation' => _x( 'Templates list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default “Posts list navigation”/”Pages list navigation”. Added in 4.4', 'templately' ),
+			'items_list'            => _x( 'Templates list', 'Screen reader text for the items list heading on the post type listing screen. Default “Posts list”/”Pages list”. Added in 4.4', 'templately' ),
+		];
+
+		$args = [
+			'labels'             => $labels,
+			'public'             => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => false,
+			'query_var'          => true,
+			'rewrite'            => [ 'slug' => 'templately-library' ],
+			'capability_type'    => 'post',
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_position'      => 10,
+			'supports'           => [ 'title', 'editor', 'author', 'thumbnail', 'custom-field' ],
+		];
+
+		register_post_type( 'templately_library', $args );
+	}
+
+	public function before_scripts() {
+		header("x-frame-options: ALLOW-FROM *.templately.com");
+	}
+
+	/**
+	 * Enqueuing Assets
+	 *
+	 * @param  string $hook
+	 * @return void
+	 */
+	public function scripts( $hook = '' ) {
+		$allowed_hooks = apply_filters(
+			'templately_admin_enqueue_allowed_hooks',
+			[ 'index.php', 'edit.php', 'plugins.php', 'toplevel_page_templately', 'elementor', 'gutenberg', 'templately_page_templately_settings' ],
+			$hook
+		);
+
+		if ( !empty($hook) && ! in_array( $hook, $allowed_hooks, true ) ) {
+			return;
+		}
+
+		$templately_settings = [];
+		// if('templately_page_templately_settings' === $hook){
+			$kit = null;
+			$el_settings = [];
+			if(defined('ELEMENTOR_VERSION')){
+				$kit = \Elementor\Plugin::$instance->kits_manager->get_active_kit();
+				if($kit){
+					$el_settings = $kit->get_settings();
+				}
+			}
+			$site_logo_id = get_theme_mod( 'custom_logo' );
+			$eb_settings  = get_option('eb_global_styles', []);
+			$eb_settings  = is_array($eb_settings) ? $eb_settings: [];
+			$eb_settings  = array_map(function($item) { return json_decode($item, true); }, $eb_settings);
+			$site_logo    = [
+				'id'   => $site_logo_id,
+				'url'  => $site_logo_id ? wp_get_attachment_url($site_logo_id) : '',
+				// 'size' => (int) get_option('templately_site_logo_size', ''),
+			];
+
+			$templately_settings = [
+				'nonce'             => wp_create_nonce( 'templately_nonce' ),
+				'has_revert'        => FullSiteImport::has_revert(),
+				'has_elementor'     => $this->check_plugin_status( 'elementor/elementor.php' ),
+				'has_eb'            => $this->check_plugin_status( 'essential-blocks/essential-blocks.php' ),
+				'site_logo'         => $site_logo,
+				'elementor'         => $el_settings,
+				'gutenberg'         => $eb_settings,
+				'siteTitle'         => get_option('blogname', ''),
+				'siteTagline'       => get_option('blogdescription', ''),
+				'customCSS'         => get_option('templately_custom_css', ''),
+				// 'imported_platform' => get_option('templately_import_platform', ''),
+			];
+		// }
+
+		if('index.php' === $hook){
+			// need separate condition so we can return if page is index.php
+
+			$is_complete = get_user_meta(get_current_user_id(), 'templately_fsi_complete', true);
+			if($is_complete && $is_complete !== 'done' && !wp_is_mobile()){
+				$user  = Options::get_instance()->get('user');
+				$email = isset($user['email']) ? $user['email'] : '';
+
+				templately()->assets->enqueue( 'templately', 'css/dashboard-style.css', [] );
+				templately()->assets->enqueue( 'templately', 'js/dashboard.js', [], true );
+				templately()->assets->localize( 'templately', 'templately', [
+					'email' => $email,
+					'nonce' => wp_create_nonce( 'templately_nonce' ),
+				] );
+
+			}
+			return;
+		}
+
+		if ( 'plugins.php' === $hook ) {
+			templately()->assets->enqueue(
+				'templately-inter',
+				set_url_scheme( '//fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap' )
+			);
+			/**
+			 * plugins.php is not our screen, so the survey gets the scoped Tailwind
+			 * build rather than css/tailwind.css. The unscoped bundle is compiled
+			 * with `important: true` and no layer, so its utilities outranked
+			 * wp-admin's own rules — `.inline` beat `.notice.inline` and `.hidden`,
+			 * which collapsed the update notices in every plugin row into coloured
+			 * slivers and revealed the hidden auto-update error placeholders.
+			 * css/tailwind-survey.css carries the same rules prefixed with
+			 * `.templately-scope`, the container the modal mounts into.
+			 */
+			templately()->assets->enqueue( 'templately-tailwind-survey', 'css/tailwind-survey.css', [ 'templately-inter' ] );
+			templately()->assets->enqueue( 'templately-deactivate-survey', 'css/deactivate-survey-style.css', [ 'templately-tailwind-survey' ] );
+			templately()->assets->enqueue( 'templately', 'js/deactivate-survey.js', [ 'regenerator-runtime' ], true );
+			templately()->assets->localize( 'templately', 'templatelyDeactivateSurvey', [
+				'nonce'          => wp_create_nonce( 'templately_nonce' ),
+				'pluginBasename' => TEMPLATELY_PLUGIN_BASENAME,
+				'reasons'        => DeactivationSurvey::get_reasons_for_js(),
+			] );
+			return;
+		}
+
+		$templately = [];
+
+		if ( 'edit.php' === $hook ) {
+			global $current_screen;
+			if ( $current_screen->post_type !== 'templately_library' ) {
+				return;
+			}
+
+			$types = templately()->theme_builder::$templates_manager->get_template_types();
+			$types = array_filter( $types, function ( $item ) {
+				return $item::get_property( 'builder' ) || $item::get_property( 'builder' ) === null;
+			} );
+
+			$types = array_reduce( $types, function ( $carry, $item ) {
+				return array_merge( $carry, [
+					[
+						'value' => call_user_func( [ $item, 'get_type' ] ),
+						'label' => call_user_func( [ $item, 'get_title' ] )
+					]
+				] );
+			}, [] );
+
+			$templately = [
+				'types' => $types
+			];
+		}
+
+		$script_dependencies = ['regenerator-runtime'];
+		$_localize_handle    = 'templately';
+		$_current_screen     = 'templately';
+
+		if ( $hook === 'elementor' || $hook === 'gutenberg' ) {
+			$_current_screen       = $hook;
+			$_localize_handle      = 'templately-' . $hook;
+			$script_dependencies[] = $_localize_handle;
+		}
+
+		if ( 'templately_page_templately_settings' === $hook ) {
+			templately()->assets->register( 'settings-vendor', 'js/chunks/settings-vendor.js', [], true );
+			$script_dependencies[] = 'settings-vendor';
+		}
+
+		if ( $hook === 'toplevel_page_templately' || $hook == 'edit.php' || 'templately_page_templately_settings' === $hook ) {
+			templately()->assets->enqueue( 'templately-admin', 'css/admin.css', [ 'templately' ] );
+		}
+
+		// Google Fonts Enqueueing
+		// DM Sans - Used in general UI
+		templately()->assets->enqueue(
+			'templately-dmsans',
+			set_url_scheme( '//fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap' )
+		);
+
+		// Inter - Used in Tailwind components and various UI elements
+		templately()->assets->enqueue(
+			'templately-inter',
+			set_url_scheme( '//fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap' )
+		);
+
+		// DM Mono - Used in settings and code-related UI
+		templately()->assets->enqueue(
+			'templately-dmmono',
+			set_url_scheme( '//fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap' )
+		);
+
+		wp_enqueue_style('wp-components');
+
+		wp_enqueue_media();
+		templately()->assets->enqueue( 'templately', 'js/templately.js', $script_dependencies, true );
+		templately()->assets->enqueue( 'templately', 'css/templately.css', ['templately-dmsans', 'templately-inter'] );
+		$tailwind_hooks = apply_filters( 'templately_tailwind_hooks', [ 'toplevel_page_templately', 'elementor', 'gutenberg', 'templately_page_templately_settings', 'edit.php' ] );
+		if ( in_array( $hook, $tailwind_hooks, true ) ) {
+			templately()->assets->enqueue( 'templately-tailwind', 'css/tailwind.css', ['templately', 'templately-inter'] );
+		}
+
+		/**
+		 * @var Elementor|Gutenberg $platform
+		 */
+		$platform = $this->platform( $_current_screen );
+
+		$global_user  = Options::get_instance()->get( 'user', false, get_current_user_id() );
+		$hide_buttons = get_option('templately-gutenberg-hide-buttons', 'no');
+		$hide_buttons = $hide_buttons === 'yes' ? 'yes' : 'no';
+
+		$templately = array_merge( [
+			'url'                => home_url(),
+			'site_url'           => site_url(),
+			'nonce'              => wp_create_nonce( 'templately_nonce' ),
+			'is_ssl'             => is_ssl(),
+			'rest_args'          => [
+				'nonce'    => wp_create_nonce( 'wp_rest' ),
+				'endpoint' => get_rest_url( null, 'templately/v1/' )
+			],
+			"icons"                   => [
+				'construction' => templately()->assets->icon( 'icons/construction.gif' ),
+				'profile'      => templately()->assets->icon( 'icons/profile.svg' ),
+				'warning'      => templately()->assets->icon( 'icons/warning.png' )
+			],
+			'locale'                  => get_locale(),
+			'promo_image'             => templately()->assets->icon( 'single-page-promo.png' ),
+			'default_image'           => templately()->assets->icon( 'clouds/cloud-item.svg' ),
+			'not_found'               => templately()->assets->icon( 'no-item-found.png' ),
+			'no_items'                => templately()->assets->icon( 'no-items.png' ),
+			'loadingImage'            => templately()->assets->icon( 'logos/loading-logo.gif' ),
+			'current_url'             => admin_url( 'admin.php?page=templately' ),
+			'wp_dashboard_url'        => admin_url( 'index.php' ),
+			'templately_library_url'  => admin_url( 'edit.php?post_type=templately_library' ),
+			'is_signed'               => Login::is_signed(),
+			'is_globally_signed'      => Login::is_globally_signed(),
+			'signed_as_global'        => Login::signed_as_global(),
+			'current_screen'          => $_current_screen,
+			'can_fsi'                 => current_user_can('install_plugins') && current_user_can('install_themes'),
+			// Account-level administration: the Subscription screen. Mirrors the
+			// subscription branch of `Checkout::checkout()`, so the sidebar can hide
+			// it for non-admins rather than route them to a 403.
+			'can_manage_account'      => current_user_can( 'manage_options' ),
+			'post_type'               => get_post_type(),
+			'has_elementor'           => rest_sanitize_boolean( is_plugin_active( 'elementor/elementor.php' ) ),
+			'has_elementor_pro'       => rest_sanitize_boolean( is_plugin_active( 'elementor-pro/elementor-pro.php' ) ),
+			'theme'                   => $_current_screen == 'templately' ? 'light' : $platform->ui_theme(),
+			'is_wp_support_gutenberg' => version_compare( get_bloginfo( 'version' ), '5.0.0', '>=' ),
+			'hide_buttons'            => $hide_buttons,
+			'settings'                => $templately_settings,
+			'wp_user_avatar'          => get_avatar_url( get_current_user_id(), [ 'size' => 96 ] ),
+			'allowed_mime_types'      => get_allowed_mime_types(),
+			'is_free_user'            => $global_user === false || isset( $global_user['plan'] ) && $global_user['plan'] == 'free',
+			'is_disconnected'         => ! empty( $global_user['is_disconnected'] ),
+			'tour_status'             => Options::get_instance()->get( 'tour_status', [] ),
+			// Which Templately site the plugin talks to. `templatelyDeveloper.dev_api`
+			// carries the same flag, but only when developer mode is on and only from
+			// its own script handle — so anything rendered before that handle runs (the
+			// footer CTA, for one) linked to the live site while the plugin was pointed
+			// at dev. Kept here, on the main localized object, `webURL()` is right from
+			// the first paint. See `react-src/utils/helper.js#webURL`.
+			'dev_api'                 => Helper::is_dev_api(),
+		], $templately );
+
+		// Apply filter to allow network admin modifications
+		$templately = apply_filters( 'templately_admin_localized_data', $templately );
+
+		templately()->assets->localize( $_localize_handle, 'templately', $templately );
+
+		do_action( 'templately_admin_scripts', $hook );
+	}
+
+	/**
+	 * Check the status of a plugin.
+	 *
+	 * @param string $plugin_path Plugin path relative to the plugins directory.
+	 * @return mixed true if active, false if not installed, 0 if installed but not active.
+	 */
+	private function check_plugin_status( $plugin_path ) {
+		$plugins = get_plugins();
+		if ( isset( $plugins[ $plugin_path ] ) ) {
+			return is_plugin_active( $plugin_path ) ? true : 0;
+		}
+		return false;
+	}
+
+	/**
+	 * Admin notices for Review and others.
+	 *
+	 * @since 2.0.0
+	 * @return void
+	 * @throws Exception
+	 * @since 2.0.0
+	 */
+	public function notices() {
+		$notices = new Notices( [
+			// 'dev_mode'       => true, // also need to clear templately_notices from option/site meta table.
+			'id'             => 'templately',
+			'storage_key'    => 'notices',
+			'lifetime'       => 3,
+			'stylesheet_url' => TEMPLATELY_ASSETS . 'css/notices.css',
+			'styles'         => TEMPLATELY_ASSETS . 'css/notices.css',
+			'priority'       => 2,
+		] );
+
+		$global_user     = Options::get_instance()->get( 'user', false, get_current_user_id() );
+		$download_counts = Options::get_instance()->get( 'total_download_counts', 0, get_current_user_id() );
+		$cloud_items     = 0;
+		if ( isset( $global_user['my_cloud']['usages'] ) ) {
+			$cloud_items = intval( $global_user['my_cloud']['usages'] );
+		}
+
+		if ( $cloud_items >= 5 || $download_counts >= 4 ) {
+			$message = sprintf( __( "We hope you're enjoying %s! Could you please do us a favor and give us a review on %s to help us spread the word and boost our motivation?", 'templately' ), '<strong>Templately</strong>', '<strong>WordPress</strong>' );
+
+			$_review_notice = [
+				'thumbnail' => templately()->assets->icon( 'logos/logo.svg' ),
+				'html'      => '<p>' . $message . '</p>',
+				'links'     => [
+					'later'            => [
+						'link'       => 'https://wordpress.org/support/plugin/templately/reviews/#new-post',
+						'target'     => '_blank',
+						'label'      => __( 'Sure, you deserve it!', 'templately' ),
+						'icon_class' => 'dashicons dashicons-external'
+					],
+					'allready'         => [
+						'label'      => __( 'I already did', 'templately' ),
+						'icon_class' => 'dashicons dashicons-smiley',
+						'attributes' => [
+							'data-dismiss' => true
+						]
+					],
+					'maybe_later'      => [
+						'label'      => __( 'Maybe Later', 'templately' ),
+						'icon_class' => 'dashicons dashicons-calendar-alt',
+						'attributes' => [
+							'data-later' => true,
+							'class'      => 'dismiss-btn'
+						]
+					],
+					'support'          => [
+						'link'       => Helper::web_url( '', [ 'support' => 'open' ] ),
+						'attributes' => [
+							'target' => '_blank'
+						],
+						'label'      => __( 'I need help', 'templately' ),
+						'icon_class' => 'dashicons dashicons-sos'
+					],
+					'never_show_again' => [
+						'label'      => __( 'Never show again', 'templately' ),
+						'icon_class' => 'dashicons dashicons-dismiss',
+						'attributes' => [
+							'data-dismiss' => true
+						]
+					]
+				]
+			];
+
+			$notices->add( 'review', $_review_notice, [
+				'start'       => $notices->strtotime(),
+				'recurrence'  => 20,
+				'dismissible' => true,
+				'refresh'     => TEMPLATELY_VERSION,
+				'screens'     => [
+					'dashboard',
+					'plugins',
+					'themes',
+					'edit-page',
+					'edit-post',
+					'users',
+					'tools',
+					'options-general',
+					'nav-menus'
+				]
+			] );
+		}
+
+		if ( $global_user === false || isset( $global_user['plan'] ) && $global_user['plan'] == 'free' ) {
+			$crown = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m15.743 10.938.161-1.578c.086-.842.142-1.399.098-1.749h.015c.727 0 1.316-.622 1.316-1.389s-.589-1.389-1.315-1.389c-.727 0-1.316.622-1.316 1.39 0 .346.12.663.32.907-.287.186-.66.58-1.223 1.171-.434.456-.65.684-.893.72a.7.7 0 0 1-.394-.059c-.223-.104-.372-.385-.67-.95l-1.57-2.97a22 22 0 0 0-.476-.873c.569-.306.958-.93.958-1.65C10.754 1.496 9.97.667 9 .667s-1.754.829-1.754 1.852c0 .72.389 1.344.958 1.65-.139.234-.293.525-.476.873l-1.57 2.97c-.298.565-.447.846-.67.95a.7.7 0 0 1-.394.058c-.242-.035-.46-.263-.893-.719-.563-.592-.937-.985-1.223-1.171.2-.244.32-.56.32-.908 0-.767-.589-1.389-1.316-1.389-.726 0-1.315.622-1.315 1.39 0 .766.589 1.388 1.315 1.388h.016c-.045.35.012.906.098 1.749l.16 1.578c.09.876.164 1.71.255 2.46H15.49c.09-.75.165-1.584.254-2.46m-7.698 6.395h1.908c2.488 0 3.732 0 4.562-.784.362-.342.591-.959.757-1.762H2.727c.166.803.395 1.42.757 1.762.83.784 2.074.784 4.562.784" fill="#fff"/></svg>';
+
+			// $notices->add( 'upsale', wp_sprintf( '<p>%1$s <a target="_blank" href="%3$s">%2$s</a>.</p>', __( '🔥 Get access to 6,500+ Ready Templates & save up to 65% OFF now', 'templately' ), __( 'Upgrade to Pro', 'templately' ), 'https://templately.com/#pricing' ), [
+			// 	'start'       => $notices->strtotime( '+10 day' ),
+			// 	'dismissible' => true,
+			// 	'refresh'     => TEMPLATELY_VERSION,
+			// 	'screens'     => [
+			// 		'dashboard',
+			// 		'plugins',
+			// 		'themes',
+			// 		'edit-page',
+			// 		'edit-post',
+			// 		'users',
+			// 		'tools',
+			// 		'options-general',
+			// 		'nav-menus'
+			// 	]
+			// ] );
+
+			// spring_savings_2026 notice
+			$_notice_text_spring_savings_2026 = '<p style="margin-top: 0; margin-bottom: 0px;">🌸 Spring Savings: Design Website Quickly With 6,500+ Elementor & Gutenberg Templates, Including AI-Powered Features ⚡️ – Now <strong>Flat 50% OFF!</strong></p>';
+
+			$_spring_savings_2026 = [
+				'thumbnail' => templately()->assets->icon( 'logos/logo-full.svg' ),
+				'html'      => $_notice_text_spring_savings_2026,
+				'links'     => [
+					'later'     => [
+						'link'       => Helper::web_url() . '#pricing',
+						'target'     => '_blank',
+						'label'      => __( 'Upgrade To Pro Now', 'templately' ),
+						'attributes' => [
+							'class' => 'button button-primary',
+						]
+					],
+					'never_show_again' => [
+						'label'      => __( 'Maybe Later', 'templately' ),
+						'attributes' => [
+							'data-dismiss' => true,
+							'class'        => 'button button-link dismiss-btn',
+						]
+					],
+				],
+			];
+
+			$notices->add( 'spring_savings_2026', $_spring_savings_2026, [
+				'start'       => $notices->strtotime('00:00:01AM 8th April, 2026'),
+				'recurrence'  => false,
+				'dismissible' => true,
+				'refresh'     => TEMPLATELY_VERSION,
+				"expire"      => strtotime( '11:59:59pm 10th May, 2026' ),
+				'display_if'  => !wp_is_mobile(),
+				'screens'     => [
+					'dashboard',
+				],
+			] );
+
+			$holiday_text = sprintf(
+				'<p style="margin-top: 0; margin-bottom: 0px;"> 🎁 %s <strong>%s</strong> %s</p>',
+				__('Get', 'templately'),
+				__('Templately PRO', 'templately'),
+				__('with up to 60% OFF & unlock 6500+ ready WordPress templates to power up web design in 2025.', 'templately')
+			);
+
+			$holiday_text .= "<div class='wpnotice-button-wrapper'>";
+			$holiday_text .= sprintf(
+				'<a class="button button-primary" target="_blank" href="%2$s">%1$s</a>',
+				$crown . __('GET PRO Lifetime Access', 'templately'),
+				Helper::web_url() . '#pricing'
+			);
+			$holiday_text .= sprintf(
+				'<button class="button button-link dismiss-btn" data-dismiss="true">%1$s</button>',
+				__('No, I\'ll Pay Full Price Later', 'templately'),
+			);
+			$holiday_text .= "</div>";
+
+
+			$_holiday = [
+				'thumbnail' => templately()->assets->icon( 'logos/logo-full.svg' ),
+				'html'      => $holiday_text,
+			];
+
+			// $notices->add( 'holiday', $_holiday, [
+			// 	'start'       => $notices->strtotime( '+0 minute' ),
+			// 	'recurrence'  => false,
+			// 	'dismissible' => true,
+			// 	'refresh'     => TEMPLATELY_VERSION,
+			// 	"expire"      => strtotime( '11:59:59pm 10th January, 2025' ),
+			// 	'display_if'  => !wp_is_mobile(),
+			// 	'screens'     => [
+			// 		'dashboard',
+			// 	],
+			// ] );
+		}
+
+		self::$cache_bank->create_account( $notices );
+		self::$cache_bank->calculate_deposits( $notices );
+	}
+
+	/**
+	 * Adding Menu In Sidebar ( WordPress Left-side Dashboard Menu )
+	 *
+	 * @return void
+	 */
+	public function admin_menu() {
+		// TODO: Role Management
+
+		add_menu_page( 'Templately', 'Templately', 'delete_posts', 'templately', '', templately()->assets->icon( 'logos/logo-icon.svg' ), '58.7' );
+
+		add_submenu_page( 'templately', 'Templately', 'Template Library', 'delete_posts', 'templately', [
+			$this,
+			'display'
+		], '58.7' );
+
+		add_submenu_page( 'templately', 'Theme Builder', 'Theme Builder', 'delete_posts', 'edit.php?post_type=templately_library', '', '58.7' );
+
+		// add_submenu_page( 'templately', 'Settings', 'Settings', 'administrator', 'templately-settings', [
+		// 	Settings::get_instance(),
+		// 	'display'
+		// ], '58.7' );
+	}
+
+	public function display() {
+		Helper::views( 'template-library', [
+			'show_grid_skeleton' => $this->is_template_library_path(),
+		] );
+	}
+
+	/**
+	 * Whether the current `?path=` targets the template-library grid
+	 * (`TemplatesTypeLayout`, e.g. `elementor/packs`) — the only route the
+	 * pre-mount skeleton's card grid actually matches. Every other route
+	 * (`clouds/*`, `downloads`, `favourites`, `subscription`,
+	 * `purchased-items`, `ai-sites`, `settings/*`, item-detail pages, and
+	 * Saved Templates) gets a generic shell instead, so a hard reload doesn't
+	 * flash the wrong page shape before React mounts. See
+	 * views/template-library.php.
+	 *
+	 * @return bool
+	 */
+	private function is_template_library_path() {
+		$path = isset( $_GET['path'] ) ? sanitize_text_field( wp_unslash( $_GET['path'] ) ) : '';
+
+		if ( $path === '' ) {
+			return true;
+		}
+
+		$segments = array_values( array_filter( explode( '/', trim( $path, '/' ) ) ) );
+
+		$non_library_prefixes = [ 'clouds', 'downloads', 'favourites', 'subscription', 'purchased-items', 'ai-sites', 'settings' ];
+
+		if ( in_array( $segments[0] ?? '', $non_library_prefixes, true ) ) {
+			return false;
+		}
+
+		// `/:platform/:type` (the grid) vs `/:platform/:type/:slug` (item
+		// detail, its own skeleton shape) or `/:platform/templates` (Saved
+		// Templates, a table) — only the 2-segment form matches the grid.
+		return count( $segments ) === 2 && $segments[1] !== 'templates';
+	}
+
+	/**
+	 * If Elementor doesn't exists.
+	 *
+	 * @return void
+	 */
+	public static function has_no_elementor() {
+		$plugin_url  = \wp_nonce_url( \self_admin_url( 'update.php?action=install-plugin&amp;plugin=elementor' ), 'install-plugin_elementor' );
+		$button_text = 'Install Elementor';
+		if ( isset( Helper::get_plugins()['elementor/elementor.php'] ) ) {
+			$plugin_url  = \wp_nonce_url( 'plugins.php?action=activate&amp;plugin=elementor/elementor.php', 'activate-plugin_elementor/elementor.php' );
+			$button_text = 'Activate Elementor';
+		}
+		$output = '<div class="notice notice-error">';
+		$output .= sprintf(
+			"<p><strong>%s</strong> %s <strong>%s</strong> %s &nbsp;&nbsp;<a  class='button-primary' href='%s'>%s</a></p>",
+			__( 'Templately', 'templately' ),
+			__( 'requires', 'templately' ),
+			__( 'Elementor', 'templately' ),
+			__( 'plugin to be installed and activated. Please install Elementor to continue.', 'templately' ),
+			esc_url( $plugin_url ),
+			__( $button_text, 'templately' )
+		);
+		$output .= '</div>';
+		echo $output;
+	}
+
+	public function header() {
+		Helper::views( 'header' );
+	}
+
+	/**
+	 * Handle links displayed below the plugin name in the WordPress Installed Plugins page.
+	 *
+	 * @return  array
+	 * @since   3.1.2
+	 * @static
+	 *
+	 */
+	public static function handleActionLinks($links, $file)
+	{
+		$settingsLink = '<a href="' . admin_url('admin.php?page=templately') . '" aria-label="' . __('Open settings page',
+				'templately') . '">' . __('Templates Library', 'templately') . '</a>';
+
+		$links[] = $settingsLink;
+		return $links;
+	}
+
+
+	public function my_custom_footer_html() {
+		global $current_screen;
+
+		if ( ! $current_screen ) {
+			return false;
+		}
+
+		if($current_screen->id !== 'dashboard'){
+			return false;
+		}
+
+		$is_complete = get_user_meta(get_current_user_id(), 'templately_fsi_complete', true);
+
+		if($is_complete && $is_complete !== 'done' && !wp_is_mobile()):
+			?>
+				<div id="templately-fsi-feedback"></div>
+			<?php
+		endif;
+	}
+}

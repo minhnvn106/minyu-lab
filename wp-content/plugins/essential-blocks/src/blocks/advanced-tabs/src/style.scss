@@ -1,0 +1,110 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.eb-advanced-tabs-wrapper {
+	.wp-block {
+		width: 100%;
+		max-width: 100%;
+
+		.block-editor-button-block-appender {
+			box-shadow: inset 0px -1px 0 1px #eeedf0;
+		}
+	}
+
+	.tab-title-wrap {
+		text-align: left;
+	}
+
+	.tab-subtitle-text {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+.eb-tab-wrapper.force-display-none-from-js {
+	display: none;
+}
+
+.eb-tabs-contents {
+	position: relative;
+	/* Improve rendering performance */
+	will-change: auto;
+	overflow: hidden;
+
+	.eb-tab-wrapper {
+		box-sizing: border-box;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(8px);
+		z-index: 1;
+
+		/* Improve rendering performance and prevent flickering */
+		will-change: height, opacity, transform;
+		backface-visibility: hidden;
+		-webkit-font-smoothing: antialiased;
+
+		/* Optimized transitions - separate timing for different properties */
+		transition:
+			height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+			transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.05s;
+
+		.eb-tab-inner {
+			margin-top: 10px;
+		}
+
+		&.active {
+			height: auto;
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+			z-index: 2;
+
+			/* Faster transition for showing content */
+			transition:
+				height 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+				opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
+				transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+		}
+
+		&.inactive {
+			height: 0;
+			width: 100%;
+			padding: 0 !important;
+			margin: 0 !important;
+			position: absolute;
+			top: 0;
+			overflow: hidden;
+			visibility: hidden;
+			opacity: 0;
+			transform: translateY(8px);
+			z-index: 1;
+
+			/* Faster transition for hiding content */
+			transition:
+				opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1),
+				transform 0.2s cubic-bezier(0.4, 0, 0.6, 1),
+				height 0.25s cubic-bezier(0.4, 0, 0.6, 1) 0.1s;
+		}
+
+		/* Prevent content jumping during transitions */
+		&:not(.active):not(.inactive) {
+			height: 0;
+			opacity: 0;
+		}
+	}
+}

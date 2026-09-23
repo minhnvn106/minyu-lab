@@ -1,0 +1,180 @@
+/**
+ * WordPress dependencies
+ */
+import { InnerBlocks, RichText } from "@wordpress/block-editor";
+import { applyFilters } from "@wordpress/hooks";
+
+/**
+ * Internal dependencies
+ */
+import {
+    BlockProps
+} from "@essential-blocks/controls";
+const Save = ({ attributes }) => {
+    const {
+        blockId,
+        id,
+        initialContent,
+        switchStyle,
+        switchSize,
+        seperatorType,
+        activeColor,
+        activeBg,
+        primaryLabelText = "First",
+        secondaryLabelText = "Second",
+        alignment,
+        primaryLabelColor,
+        secondaryLabelColor,
+        backgroundType,
+        backgroundColor,
+        backgroundGradient,
+        classHook,
+        switchLiquidGlass,
+        effectStyle,
+    } = attributes;
+
+    const getMargin = () => {
+        switch (alignment) {
+            case "center":
+                return {
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                };
+
+            case "right":
+                return {
+                    marginLeft: "auto",
+                    marginRight: "0px",
+                };
+
+            case "left":
+                return {
+                    marginLeft: "0px",
+                    marginRight: "auto",
+                };
+        }
+
+        return {
+            marginLeft: "auto",
+            marginRight: "auto",
+        };
+    };
+
+    return (
+        <BlockProps.Save attributes={attributes}>
+            <div className={`eb-parent-wrapper eb-parent-${blockId} ${classHook || ''}`}>
+                <div
+                    className={`${blockId} eb-toggle-wrapper ${effectStyle === "default" ? `switch-style-${switchStyle}` : ''} eb-toggle-effect-${effectStyle} eb-toggle-primary`}
+                    data-init-content={initialContent}
+                    data-size={switchSize}
+                    data-switch-style={switchStyle}
+                    data-bg-type={backgroundType}
+                    data-bg-color={backgroundColor}
+                    data-bg-gradient={backgroundGradient || "none"}
+                    data-primary-color={primaryLabelColor || "inherit"}
+                    data-secondary-color={secondaryLabelColor || "inherit"}
+                    data-active-color={activeColor || "inherit"}
+                    data-active-bg={activeBg}
+                >
+                    <div
+                        className="eb-toggle-heading"
+                        style={{
+                            display: switchStyle === "toggle" ? "block" : "none",
+                        }}
+                    >
+                        <input
+                            type="checkbox"
+                            className="eb-text-switch-checkbox"
+                            id={`eb-${id}`}
+                            style={{ display: "none" }}
+                        />
+                        <div className="eb-text-switch-wrapper">
+                            <div className="eb-text-switch-content" style={{ ...getMargin() }}>
+                                <label className="eb-text-switch-label" for={`eb-${id}`}>
+                                    <div className="eb-text-switch-toggle"></div>
+                                    <div className="eb-switch-names">
+                                        <div className="eb-switch-name primary">
+                                            {effectStyle !== "default" && (
+                                                applyFilters("eb_toggle_content_pro_icon_primary_save", "", attributes)
+                                            )}
+                                            <RichText.Content
+                                                tagName="span"
+                                                className="eb-toggle-primary-label-text"
+                                                value={primaryLabelText}
+                                            />
+                                        </div>
+                                        <div className="eb-switch-name secondary">
+                                            {effectStyle !== "default" && (
+                                                applyFilters("eb_toggle_content_pro_icon_secondary_save", "", attributes)
+                                            )}
+                                            <RichText.Content
+                                                tagName="span"
+                                                className="eb-toggle-secondary-label-text"
+                                                value={secondaryLabelText}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {effectStyle !== "default" && (
+                                        applyFilters("eb_toggle_content_pro_effect_html", "", attributes)
+                                    )}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className="eb-toggle-heading"
+                        style={{
+                            display: switchStyle !== "toggle" ? "block" : "none",
+                        }}
+                    >
+                        <RichText.Content
+                            tagName="span"
+                            className="eb-toggle-primary-label"
+                            value={primaryLabelText}
+                        />
+                        <label className={`eb-toggle-switch toggle-${switchSize}`}>
+                            <input className="eb-toggle-input" type="checkbox" />
+                            {effectStyle !== "default" && (
+                                <div className="eb-toggle-effect-icons">
+                                    <span className="icon-wrapper">
+                                        {applyFilters("eb_toggle_content_pro_icon_primary_save", "", attributes)}
+                                    </span>
+                                    <span className="icon-wrapper">
+                                        {applyFilters("eb_toggle_content_pro_icon_secondary_save", "", attributes)}
+                                    </span>
+                                </div>
+                            )}
+                            <span className="eb-toggle-controller" />
+                            <span className={`eb-toggle-slider ${switchLiquidGlass.enable ? 'eb_liquid_glass-' + switchLiquidGlass.effect + ' ' + 'eb_liquid_glass_shadow-' + switchLiquidGlass.shadowEffect : ''}`} />
+                            {effectStyle === "default" && (
+                                applyFilters("eb_liquid_glass_effect_pro_content", "", attributes, "switchLiquidGlass")
+                            )}
+
+                            {effectStyle !== "default" && (
+                                applyFilters("eb_toggle_content_pro_effect_html", "", attributes)
+                            )}
+
+                        </label>
+
+                        <span
+                            className={`eb-toggle-${seperatorType} eb-toggle-seperator`}
+                        ></span>
+
+                        <RichText.Content
+                            tagName="span"
+                            className="eb-toggle-secondary-label"
+                            value={secondaryLabelText}
+                        />
+                    </div>
+                    <div className="eb-toggle-content">
+                        <InnerBlocks.Content />
+                    </div>
+                </div>
+            </div>
+        </BlockProps.Save>
+    );
+};
+
+export default Save;

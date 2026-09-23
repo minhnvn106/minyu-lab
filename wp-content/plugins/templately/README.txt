@@ -1,0 +1,244 @@
+=== Templately – Elementor & Gutenberg Template Library: 6500+ Free & Pro Ready Templates And Cloud! ===
+Contributors: templately, wpdevteam, re_enter_rupok, Asif2BD, priyomukul, rahat89, alimuzzamanalim, sapanmozammel
+Donate link: https://templately.com
+Tags: templates, elementor template, Gutenberg template, landing page, WoCommerce Templates
+Requires at least: 5.0
+Tested up to: 7.1
+Requires PHP: 7.2
+Stable tag: 3.7.5
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+Templately is an AI-powered WordPress templates cloud for Elementor and Gutenberg that offers 6,500+ ready template designs for a wide range of niches
+
+== Description ==
+
+= ULTIMATE FREE TEMPLATES CLOUD FOR WORDPRESS – ELEMENTOR & GUTENBERG SUPPORTED =
+
+Templately is an AI-powered WordPress template cloud for Elementor and Gutenberg. It offers 6,500+ ready template designs that cover a wide range of website niches. Using the ready templates, you can effortlessly design high-converting websites without any code.
+
+What makes Templately unique is its **Full Site Import** feature, allowing you to import templates in just one click, and an AI Content Generator to generate entire website copy instantly. Also, the My WorkSpace and My Cloud storage enable smooth design collaboration, allowing you to manage all your designs in one place with [Templately](https://templately.com/). Features include:
+
+### ✨ Stunning FREE Templates
+
+Templately offers a vast collection of free Gutenberg and Elementor templates so you can easily explore and design with the one you like.
+
+https://www.youtube.com/watch?v=IirqgQmFFqg
+
+### ✨ AI-Content Generator and Image Replacement
+
+Generate engaging, niche-specific copies for your entire website instantly with just a few prompts and replace images using Templately AI content generator.
+
+Templately AI works on a credit-based system. Each time you generate content, a small number of credits is used, depending on the content type and length. You can choose a plan with AI credits that fits your needs, and if you run out, you can easily purchase additional AI credits to keep generating high-quality copy instantly.
+
+https://www.youtube.com/watch?v=Isv4RY7I02E
+
+### 🔥 Full Site Import
+
+Templately Full Site Import allows you to import your entire ready templates pack with just one click, so you will not have to import pages individually, which takes time.
+
+### ☁️ FREE Storage In MyCloud
+
+Save and upload your designed templates to the cloud using Templately’s My Cloud storage feature and access all your saved templates anytime from any device.
+
+### 🤝 ‘My WorkSpace’ For Smooth Collaboration
+
+Invite your team members to design in collaboration using the Templately ‘My WorkSpace’. This allows you to involve others in designing websites.
+
+### 🚀 Seamless Integration With Popular Page Builders
+
+No matter whether you are using Elementor or Gutenberg, create complete websites using Elementor templates or your favorite Gutenberg ones in a few clicks.
+
+### 🔥 3,000+ Elementor Templates
+
+If you love using the Elementor website builder, you will find 3,000+ ready Elementor templates and blocks in the Elementor templates library to design a full website in just a few clicks.
+
+### 🔥 3200+ Gutenberg Templates
+
+Prefer to use the Gutenberg block editor? Build seamlessly with 3,200+ ready-to-use Gutenberg templates without any code from the Gutenberg templates library.
+
+### 👨‍💻 Friendly And Prompt Support
+
+Get help and assistance from our dedicated forum support and create stunning websites with Templately.
+
+### 🔥 Premium WordPress Website Templates [PRO]
+
+Create conversion-optimized websites for every niche using the premium template packs from Templately PRO.
+
+If you loved the features, you can give Templately a try and explore the free templates. To unlock the premium templates with more features, you need to upgrade to Templately PRO.
+
+
+## 🚀 BACKED BY A TRUSTED TEAM
+
+This Templates Cloud is brought to you by the team behind [WPDeveloper](https://wpdeveloper.com/), a dedicated marketplace for WordPress, trusted by over 6 million happy users.
+
+## 👨‍💻 DOCUMENTATION AND SUPPORT
+
+* For documentation and tutorials, go to our [documentation](https://docs.templately.com/)
+* If you have any more questions, visit our support on the [Plugin’s Forum](https://wordpress.org/support/plugin/templately).
+* For more information about features, FAQs and documentation, check out our website at [Templately](https://templately.com/).
+
+## 💙 LOVED Templately?
+
+* Join our [Facebook Group](https://www.facebook.com/groups/wpdeveloper.net/)
+* If you love Templately, rate us on [WordPress](https://wordpress.org/support/plugin/templately/reviews/?rate=5#new-post)
+
+## 🔥 WHAT’S NEXT
+
+If you like Templately, then consider checking out our other WordPress Plugins:
+
+* [Essential Addons For Elementor](https://wordpress.org/plugins/essential-addons-for-elementor-lite/) – Most popular Elementor addon with 2 Million+ active users in the WordPress repository.
+* [Essential Blocks for Gutenberg](https://wordpress.org/plugins/essential-blocks/) – AI-powered Gutenberg block library plugin with 70+ exclusive blocks.
+* [BetterDocs](https://wordpress.org/plugins/betterdocs/): AI-powered knowledge base and documentation plugin for WordPress to reduce manual support tickets & improve user experience.
+* [EmbedPress](https://wordpress.org/plugins/embedpress/): Advanced embedding plugin that supports embedding multimedia content from 250+ sources like videos, images, posts, audio, maps, upload PDF, DOC, PPT, and much more into your WordPress in one click.
+* [NotificationX](https://notificationx.com/): Social Proof & FOMO Marketing solution to increase conversion rates with eye-catching pop-up notifications.
+* [BetterLinks](https://betterlinks.io/) - Powerful AI-powered WordPress link management plugin to manage, track, and analyze links.
+* [SchedulePress](https://wordpress.org/plugins/wp-scheduled-posts/) – Advanced scheduling and social share plugin for WordPress with 7+ social media integrations.
+* [easy.jobs](https://wordpress.org/plugins/easyjobs/): A powerful recruitment solution to find the right talent with an AI-powered screening system, and much more.
+
+Visit [WPDeveloper](https://wpdeveloper.com/) to learn more about how to do better in WordPress with [Help Tutorial, Tips & Tricks](https://wpdeveloper.com/blog).
+
+== Installation ==
+
+= Modern Way: =
+1. Go to the WordPress Dashboard "Add New Plugin" section.
+2. Search For "Templately".
+3. Install, then Activate it.
+4. Follow the [Documentation](https://docs.templately.com/)
+
+= Old Way: =
+1. Upload `templately` to the `/wp-content/plugins/` directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Follow the [Documentation](https://docs.templately.com/)
+
+
+== Frequently Asked Questions ==
+
+= Does it work with any WordPress theme? =
+
+- Yes, it will work with any standard WordPress theme.
+
+= How Does Templately AI Content Generator Work? =
+
+- Templately AI uses a credit-based system. Each time you generate content, a small number of credits is used based on the content length and type. You can choose a credit plan that matches your content needs and generate high-quality copy instantly.
+
+= How to use the ready-to-use templates from Templately? =
+
+- First, you have to install Templately on your website, then choose your favorite template from the dashboard. With just a single click, you can insert Templately templates on your website.
+
+= Does Templately have WooCommerce Templates? =
+
+- Templately has a lot of eCommerce templates that fully support WooCommerce. So, you can build your WooCommerce store with the ready-to-use templates from Templately.
+
+= Can I save my Templates for reusing? =
+
+- Yes. Templately comes with Cloud Storage. You can easily save your templates there and reuse them anytime.
+
+= Does Templately have free templates? =
+
+- Yes, Templately offers many free templates for Elementor & Gutenberg that you can use to build your website.
+
+= Will you add more Elementor and Gutenberg templates? =
+
+- Every month, we are adding new Gutenberg and Elementor templates to create beautiful websites using your favorite page builder.
+
+
+== Screenshots ==
+
+1. Importing Templately Template
+2. Saving Templates in Cloud
+3. Template Gallery
+4. Templately My Clouds
+5. Templately My WorkSpace
+
+
+== Changelog ==
+= 3.7.5 - 25-08-2026 =
+Improved: AI Template import process for faster site creation. 
+Few minor bug fixes and improvements
+
+= 3.7.4 - 20-08-2026 =
+Fixed: Plugins screen showing stray red and orange marks in every plugin row.
+Few minor bug fixes and improvements
+
+= 3.7.3 - 19-08-2026 =
+Added: My AI Sites - view and re-import the websites you generated with AI.
+Improved: Redesigned My Cloud, WorkSpace, My Favourites, My Downloads, Purchased Items and Subscription screens to match templately.com.
+Fixed: Renewal date and the free plan column missing from the Subscription screen.
+Fixed: Searching inside My Cloud or a WorkSpace switching over to a global template search.
+Fixed: WorkSpace file search not clearing when leaving or switching WorkSpace.
+Fixed: Header menu items overlapping on smaller screens.
+Fixed: Credit cost shown when re-importing a site that was already generated.
+Fixed: Plugin dependency filter opening off-screen near the bottom of the list.
+Few minor bug fixes and improvements.
+
+= 3.7.2 - 06-08-2026 =
+Fixed: Arbitrary file upload during template import - Reported by Wordfence.
+Fixed: Unauthenticated overwrite of administrator cloud connection - Reported by Patchstack.
+Improved: Enhanced security and reliability across template imports, plugin installation, and editor features.
+Few minor bug fixes and improvements.
+
+= 3.7.1 - 27-07-2026 =
+Fixed: "Build with AI" not resuming conversations after importing from the app.
+Fixed: Unauthenticated overwrite of the administrator cloud connection. Reported by WPScan (Shivamani Vastrala).
+Improved: Clearer plugin installation notice during pack import.
+A few minor bugs and improved overall stability.
+
+= 3.7.0 - 23-07-2026 =
+Added: Support for AI-generated full website import from the Templately app to WordPress.
+Added: AI content generation in 15 languages for AI Full Site Import.
+Fixed: Global settings not applying when inserting a single template in Gutenberg.
+Fixed: EA WooCommerce widgets showing placeholder content in Templately Theme Builder.
+Improved: Performance, stability, and minor bug fixes.
+
+= 3.6.8 - 07-07-2026 =
+Improved: Security and overall stability
+Fixed: WooCommerce widgets rendering empty in the Elementor editor
+Few minor bug fixes and improvements
+
+= 3.6.7 - 05-07-2026 =
+Added: Site-wide Custom CSS import for template packs
+Added: Business information detection during Frontend/Agent template imports
+Fixed: Custom URLs not updating after importing a template pack
+Fixed: Shared Workspace permission issue when moving or deleting templates
+Fixed: Single template import failure when Elementor Pro was not installed
+Few minor bug fixes and improvements
+
+= 3.6.6 - 16-06-2026 =
+Improved: Smoother template purchase and checkout experience.
+Improved: Automatic account verification after re-login for unverified users.
+Improved: Build Website and template import experience from Templately website.
+Improved: UI and usability of all popup modals.
+Improved: Logout handling for expired authentication tokens.
+Few minor bug fixes and improvements.
+
+= 3.6.5 - 24-05-2026 =
+Fixed: Previous AI conversation was appearing above the resumed Templately site chat history.
+Few minor bug fixes and improvements.
+
+= 3.6.4 - 24-05-2026 =
+Improved: Templately AI now carries full site conversations into the plugin with selected template.
+Few minor bug fixes and improvements.
+
+= 3.6.3 - 04-05-2026 =
+Improved: Templately AI now skips the greeting step and starts directly at the business name step when user comes from Templately site.
+Few minor bug fixes and improvements.
+
+= 3.6.2 - 23-04-2026 =
+Fixed: Security enhancements (reported by Patchstack).
+Few minor bug fixes and improvements.
+
+= 3.6.1 - 19-04-2026 =
+Fixed: Section importing was failing in Elementor.
+Few minor bug fixes and improvements.
+
+= 3.6.0 - 15-04-2026 =
+Revamped: Entire Template Library experience
+Few minor bug fixes and improvements
+
+= Earlier versions =
+Please refer to the separate changelog.txt file.
+
+== Upgrade Notice ==
+
+[Major Update] Must Update.

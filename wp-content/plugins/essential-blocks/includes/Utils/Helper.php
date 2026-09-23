@@ -1,0 +1,1017 @@
+<?php
+
+    namespace EssentialBlocks\Utils;
+
+    class Helper {
+    /**
+     * Get installed WordPress Plugin List
+     *
+     * @return array
+     */
+    public static function get_plugins() {
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        return get_plugins();
+    }
+
+    /**
+     * Get Responsive Breakpoints for Localize
+     */
+    public static function get_responsive_breakpoints() {
+        $settings     = get_option( 'eb_settings', array() );
+        $settingsData = array();
+        if ( array_key_exists( 'responsiveBreakpoints', $settings ) ) {
+            $settingsData = $settings[ 'responsiveBreakpoints' ];
+            if ( gettype( $settingsData ) === 'string' && strlen( $settingsData ) > 0 ) {
+                $settingsData = (array) json_decode( html_entity_decode( stripslashes( $settingsData ) ) );
+            }
+        } else {
+            $settings[ 'responsiveBreakpoints' ] = wp_json_encode( array(
+                'tablet' => 1024,
+                'mobile' => 767
+            ) );
+
+            update_option( 'eb_settings', $settings );
+
+            $settingsData = $settings[ 'responsiveBreakpoints' ];
+        }
+
+        return $settingsData;
+    }
+
+    /**
+     * Get Active Plugins List
+     */
+    public static function get_active_plugin_list() {
+        $active_plugins = get_option( 'active_plugins' );
+        if ( is_multisite() ) {
+            $all = wp_get_active_network_plugins();
+            if ( $all ) {
+                $active_plugins = array_merge( $active_plugins, array_map( function ( $each ) {
+                    $arr = explode( '/', $each );
+                    return $arr[ count( $arr ) - 2 ] . DIRECTORY_SEPARATOR . end( $arr );
+                }, $all ) );
+            }
+        }
+        return $active_plugins;
+    }
+
+    /**
+     * Get Plugins List for Localize
+     */
+    public static function get_plugin_list_for_localize() {
+        $all_plugins    = self::get_plugins();
+        $active_plugins = self::get_active_plugin_list();
+        if ( is_array( $all_plugins ) ) {
+            foreach ( $all_plugins as $key => $plugin ) {
+                $data                 = array();
+                $data[ 'TextDomain' ] = $plugin[ 'TextDomain' ];
+                if ( is_array( $active_plugins ) && in_array( $key, $active_plugins ) ) {
+                    $data[ 'active' ] = true;
+                } else {
+                    $data[ 'active' ] = false;
+                }
+                // Assign
+                $all_plugins[ $key ] = $data;
+            }
+        }
+        return $all_plugins;
+    }
+
+    /**
+     * Check if json string
+     *
+     * @param string $context json string.
+     *
+     * @return boolean
+     * @since   4.3.3
+     * @access  public
+     */
+    public static function isJson( $string ) {
+        if ( ! is_string( $string ) ) {
+            return false;
+        }
+        json_decode( $string );
+        return json_last_error() === JSON_ERROR_NONE;
+    }
+
+    /**
+     * Used HTML properties
+     *
+     * @param array  $tags Allowed HTML tags.
+     * @param string $context Context.
+     *
+     * @return array
+     * @since   4.3.0
+     * @access  public
+     */
+    public function eb_common_allowed_html( $tags, $context ) {
+        if ( 'post' !== $context ) {
+            return $tags;
+        }
+
+        add_filter( 'safe_style_css', array( $this, 'eb_allowed_css_properties' ) );
+
+        // Global attributes allowed for all tags
+        $global = array(
+            'class' => true,
+            'id' => true,
+            'style' => true,
+            'title' => true,
+            'role' => true,
+            'aria-*' => true,
+            'data-*' => true,
+            'tabindex' => true
+        );
+
+        $tags[ 'i' ] = array_merge( array(
+            'icon' => true
+        ), $global );
+
+        $tags[ 'span' ] = array_merge( array(
+            'style' => true
+        ), $global );
+
+        /*
+         * ——————————————————————————————
+         * FULL SVG SUPPORT
+         * ——————————————————————————————
+         */
+
+        // SVG root
+        $tags[ 'svg' ] = array_merge( array(
+            'xmlns' => true,
+            'xmlns:xlink' => true,
+            'width' => true,
+            'height' => true,
+            'fill' => true,
+            'fill-rule' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+            'stroke-linecap' => true,
+            'stroke-linejoin' => true,
+            'viewBox' => true, // case sensitive
+            'viewbox' => true, // case sensitive
+            'preserveAspectRatio' => true,
+            'preserveaspectratio' => true
+        ), $global );
+
+        // <g> group tag
+        $tags[ 'g' ] = array_merge( array(
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+            'stroke-linecap' => true,
+            'stroke-linejoin' => true,
+            'opacity' => true,
+            'clip-path' => true,
+            'transform' => true
+        ), $global );
+
+        // <path> tag
+        $tags[ 'path' ] = array_merge( array(
+            'd' => true,
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+            'stroke-opacity' => true,
+            'stroke-linecap' => true,
+            'stroke-linejoin' => true,
+            'stroke-miterlimit' => true,
+            'opacity' => true,
+            'transform' => true
+        ), $global );
+
+        // <defs> tag (required in your SVG example)
+        $tags[ 'defs' ] = $global;
+
+        // <title> tag inside SVG
+        $tags[ 'title' ] = $global;
+
+        // INPUT / FORM SUPPORT (as you already had)
+
+        $tags[ 'input' ] = array_merge( array(
+            'type' => true,
+            'name' => true,
+            'value' => true,
+            'placeholder' => true,
+            'required' => true,
+            'checked' => true
+        ), $global );
+
+        /*
+         * ——————————————————————————————
+         * COMMON HTML TAGS SUPPORT
+         * ——————————————————————————————
+         */
+
+        // Apply global attributes to common HTML tags
+        $common_tags = array( 'div', 'span', 'a', 'button', 'i', 'img', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'ol' );
+        foreach ( $common_tags as $tag ) {
+            if ( ! isset( $tags[ $tag ] ) ) {
+                $tags[ $tag ] = $global;
+            } else {
+                $tags[ $tag ] = array_merge( $tags[ $tag ], $global );
+            }
+        }
+
+        // Specific attributes for anchor tags
+        if ( ! isset( $tags[ 'a' ][ 'href' ] ) ) {
+            $tags[ 'a' ][ 'href' ]   = true;
+            $tags[ 'a' ][ 'target' ] = true;
+            $tags[ 'a' ][ 'rel' ]    = true;
+        }
+
+        // Specific attributes for img tags
+        if ( ! isset( $tags[ 'img' ][ 'src' ] ) ) {
+            $tags[ 'img' ][ 'src' ]     = true;
+            $tags[ 'img' ][ 'alt' ]     = true;
+            $tags[ 'img' ][ 'width' ]   = true;
+            $tags[ 'img' ][ 'height' ]  = true;
+            $tags[ 'img' ][ 'loading' ] = true;
+            $tags[ 'img' ][ 'srcset' ]  = true;
+            $tags[ 'img' ][ 'sizes' ]   = true;
+        }
+
+        // Specific attributes for button tags
+        if ( ! isset( $tags[ 'button' ][ 'type' ] ) ) {
+            $tags[ 'button' ][ 'type' ]     = true;
+            $tags[ 'button' ][ 'disabled' ] = true;
+            $tags[ 'button' ][ 'name' ]     = true;
+            $tags[ 'button' ][ 'value' ]    = true;
+        }
+
+        return $tags;
+    }
+
+    /**
+     * Used HTML properties
+     *
+     * @param array  $tags Allowed HTML tags.
+     * @param string $context Context.
+     *
+     * @return array
+     * @since   4.3.0
+     * @access  public
+     */
+    public function eb_allowed_html( $tags, $context ) {
+
+        if ( 'post' !== $context ) {
+            return $tags;
+        }
+
+        add_filter( 'safe_style_css', array( $this, 'eb_allowed_css_properties' ) );
+
+        // Global attributes allowed for all tags
+        $global = array(
+            'class' => true,
+            'id' => true,
+            'style' => true,
+            'title' => true,
+            'role' => true,
+            'aria-*' => true,
+            'data-*' => true
+        );
+
+        /*
+         * ——————————————————————————————
+         * FULL SVG SUPPORT
+         * ——————————————————————————————
+         */
+
+        // SVG root
+        $tags[ 'svg' ] = array_merge( array(
+            'xmlns' => true,
+            'xmlns:xlink' => true,
+            'width' => true,
+            'height' => true,
+            'fill' => true,
+            'fill-rule' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+            'stroke-linecap' => true,
+            'stroke-linejoin' => true,
+            'viewBox' => true, // case sensitive
+            'viewbox' => true, // case sensitive
+            'preserveAspectRatio' => true,
+            'preserveaspectratio' => true
+        ), $global );
+
+        // <g> group tag
+        $tags[ 'g' ] = array_merge( array(
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+            'stroke-linecap' => true,
+            'stroke-linejoin' => true,
+            'opacity' => true,
+            'clip-path' => true,
+            'transform' => true
+        ), $global );
+
+        // <path> tag
+        $tags[ 'path' ] = array_merge( array(
+            'd' => true,
+            'fill' => true,
+            'stroke' => true,
+            'stroke-width' => true,
+            'stroke-opacity' => true,
+            'stroke-linecap' => true,
+            'stroke-linejoin' => true,
+            'stroke-miterlimit' => true,
+            'opacity' => true,
+            'transform' => true
+        ), $global );
+
+        // <defs> tag (required in your SVG example)
+        $tags[ 'defs' ] = $global;
+
+        // <title> tag inside SVG
+        $tags[ 'title' ] = $global;
+
+        /*
+         * ——————————————————————————————
+         * INPUT / FORM SUPPORT (as you already had)
+         * ——————————————————————————————
+         */
+
+        $tags[ 'input' ] = array_merge( array(
+            'type' => true,
+            'name' => true,
+            'value' => true,
+            'placeholder' => true,
+            'required' => true,
+            'checked' => true
+        ), $global );
+
+        $tags[ 'textarea' ] = array_merge( array(
+            'name' => true,
+            'rows' => true,
+            'placeholder' => true,
+            'required' => true
+        ), $global );
+
+        $tags[ 'select' ] = array_merge( array(
+            'name' => true,
+            'value' => true,
+            'required' => true
+        ), $global );
+
+        $tags[ 'option' ] = array_merge( array(
+            'value' => true,
+            'selected' => true
+        ), $global );
+
+        return $tags;
+    }
+
+    /**
+     * Allow SVG-specific CSS properties in style attributes
+     *
+     * @param array $allowed_css Array of allowed CSS properties
+     * @return array Modified array with SVG properties
+     */
+    public function eb_allowed_css_properties( $allowed_css ) {
+
+        $eb_css = array(
+            // SVG properties
+            'fill',
+            'stroke',
+            'stroke-width',
+            'stroke-opacity',
+            'stroke-linecap',
+            'stroke-linejoin',
+            'stroke-miterlimit',
+            'stroke-dasharray',
+            'stroke-dashoffset',
+            'clip-path',
+            'mask',
+            'filter',
+            'vector-effect',
+            // Common CSS properties used by Essential Blocks
+            'opacity',
+            'transform',
+            'transform-origin',
+            'display',
+            'visibility',
+            'position',
+            'z-index',
+            'top',
+            'right',
+            'bottom',
+            'left',
+            'margin',
+            'margin-top',
+            'margin-right',
+            'margin-bottom',
+            'margin-left',
+            'padding',
+            'padding-top',
+            'padding-right',
+            'padding-bottom',
+            'padding-left',
+            'border-radius',
+            'transition',
+            'cursor'
+        );
+
+        return array_merge( $allowed_css, $eb_css );
+    }
+
+    /**
+     * Define Global Colors
+     *
+     * @return array
+     * @since   4.4.0
+     * @access  public
+     */
+    public static function global_colors() {
+        return array(
+            (object) array(
+                'color' => '#101828',
+                'name' => 'Primary Color',
+                'slug' => 'primary',
+                'var' => '--eb-global-primary-color'
+            ),
+            (object) array(
+                'color' => '#475467',
+                'name' => 'Secondary Color',
+                'slug' => 'secondary',
+                'var' => '--eb-global-secondary-color'
+
+            ),
+            (object) array(
+                'color' => '#98A2B3',
+                'name' => 'Tertiary Color',
+                'slug' => 'tertiary',
+                'var' => '--eb-global-tertiary-color'
+
+            ),
+            (object) array(
+                'color' => '#475467',
+                'name' => 'Text Color',
+                'slug' => 'text',
+                'var' => '--eb-global-text-color'
+            ),
+            (object) array(
+                'color' => '#1D2939',
+                'name' => 'Heading Color',
+                'slug' => 'heading',
+                'var' => '--eb-global-heading-color'
+            ),
+            (object) array(
+                'color' => '#444CE7',
+                'name' => 'Link Color',
+                'slug' => 'link',
+                'var' => '--eb-global-link-color'
+            ),
+            (object) array(
+                'color' => '#F9FAFB',
+                'name' => 'Background Color',
+                'slug' => 'background',
+                'var' => '--eb-global-background-color'
+            ),
+            (object) array(
+                'color' => '#FFFFFF',
+                'name' => 'Button Text Color',
+                'slug' => 'buttonText',
+                'var' => '--eb-global-button-text-color'
+            ),
+            (object) array(
+                'color' => '#101828',
+                'name' => 'Button Background Color',
+                'slug' => 'buttonBackground',
+                'var' => '--eb-global-button-background-color'
+            )
+        );
+    }
+
+    /**
+     * Define Gradient Colors
+     *
+     * @return array
+     * @since   4.4.0
+     * @access  public
+     */
+    public static function gradient_colors() {
+        return array(
+            (object) array(
+                'color' => 'linear-gradient(90deg, hsla(259, 84%, 78%, 1) 0%, hsla(206, 67%, 75%, 1) 100%)',
+                'name' => 'Primary Color',
+                'slug' => 'gradientPrimary',
+                'var' => '--eb-gradient-primary-color'
+            ),
+            (object) array(
+                'color' => 'linear-gradient(90deg, hsla(18, 76%, 85%, 1) 0%, hsla(203, 69%, 84%, 1) 100%)',
+                'name' => 'Secondary Color',
+                'slug' => 'gradientSecondary',
+                'var' => '--eb-gradient-secondary-color'
+            ),
+            (object) array(
+                'color' => 'linear-gradient(90deg, hsla(248, 21%, 15%, 1) 0%, hsla(250, 14%, 61%, 1) 100%)',
+                'name' => 'Tertiary Color',
+                'slug' => 'gradientTertiary',
+                'var' => '--eb-gradient-tertiary-color'
+            ),
+            (object) array(
+                'color' => 'linear-gradient(90deg, rgb(250, 250, 250) 0%, rgb(233, 233, 233) 49%, rgb(244, 243, 243) 100%)',
+                'name' => 'Background Color',
+                'slug' => 'gradientBackground',
+                'var' => '--eb-gradient-background-color'
+            )
+        );
+    }
+
+    /**
+     * array filter recursive for check if any block exists in block list
+     *
+     * @param array  $arrayList Array List.
+     * @param string $match Array key to match
+     *
+     * @return boolean
+     * @since   4.3.0
+     * @access  public
+     */
+    public static function array_filter_recursive( $arrayList, $match ) {
+        foreach ( $arrayList as $block ) {
+            if ( $match === $block[ 'blockName' ] ) {
+                return true;
+            }
+            if ( isset( $block[ 'innerBlocks' ] ) && count( $block[ 'innerBlocks' ] ) > 0 ) {
+                if ( self::array_filter_recursive( $block[ 'innerBlocks' ], $match ) ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static function calculate_read_time( $text ) {
+        if ( empty( $text ) ) {
+            return 0;
+        }
+
+        $text = preg_replace( '/<([a-z][a-z0-9]*)[^>]*?(\/?)>/si', '<$1$2>', $text );
+        $text = wp_strip_all_tags( $text );
+
+        $wpm   = 200;
+        $words = str_word_count( trim( $text ) );
+        $time  = ceil( $words / $wpm );
+        return $time;
+    }
+
+    /**
+     * Remove HTML Tags with Inner Contents
+     *
+     * @param string $content
+     * @param mixed  $tags
+     * @return string
+     */
+    public static function removeHtmlTagWithInnerContents( $contant, $tags ) {
+        if ( is_array( $tags ) ) {
+            foreach ( $tags as $tag ) {
+                $contant = preg_replace(
+                    sprintf(
+                        '/<%1$s\b[^>]*>(.*?)<\/%1$s>/is',
+                        $tag
+                    ),
+                    '',
+                    $contant
+                );
+            }
+        } else {
+            $contant = preg_replace( '/<figure\b[^>]*>(.*?)<\/figure>/is', '', $contant );
+        }
+
+        return $contant;
+    }
+
+    public static function is_isset( $value, $default = '' ) {
+        return isset( $_POST[ $value ] ) ? sanitize_text_field( $_POST[ $value ] ) : $default;
+    }
+
+    public static function load_google_font( $fonts, $handler ) {
+        if ( is_array( $fonts ) && ! empty( $fonts ) ) {
+            $gfonts      = '';
+            $gfonts_attr = ':100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic';
+            foreach ( $fonts as $font ) {
+                $gfonts .= str_replace( ' ', '+', trim( $font ) ) . $gfonts_attr . '|';
+            }
+
+            if ( ! empty( $gfonts ) ) {
+                $query_args = array(
+                    'family' => $gfonts
+                );
+                wp_register_style(
+                    $handler,
+                    add_query_arg( $query_args, '//fonts.googleapis.com/css' ),
+                    array(),
+                    ESSENTIAL_BLOCKS_VERSION
+                );
+                wp_enqueue_style( $handler );
+            }
+            // Reset.
+            $gfonts = '';
+        }
+    }
+
+    public static function build_url( $url, $params = array() ) {
+        $url_components = wp_parse_url( $url );
+        $_build_query   = http_build_query( $params );
+
+        $_build_query .= ! empty( $url_components[ 'query' ] ) ? '&' . $url_components[ 'query' ] : '';
+        $_build_query .= ! empty( $url_components[ 'fragment' ] ) ? '#' . $url_components[ 'fragment' ] : '';
+
+        return $url_components[ 'scheme' ] . '://' . $url_components[ 'host' ] . '/' . trim( $url_components[ 'path' ], '/' ) . '?' . $_build_query;
+    }
+
+    protected static function get_views_path( $name ) {
+        $file = ESSENTIAL_BLOCKS_DIR_PATH . 'views/' . $name . '.php';
+
+        if ( file_exists( $file ) ) {
+            return $file;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get views for front-end display
+     *
+     * @param string $name  it will be file name only from the view's folder.
+     * @param array  $data
+     * @return void
+     */
+    public static function views( $name, $data = array() ) {
+        $__file = static::get_views_path( $name );
+        $helper = static::class;
+
+        extract( $data, EXTR_SKIP );
+        if ( is_readable( $__file ) ) {
+            include $__file;
+        }
+    }
+
+    /**
+     * Load-more / pagination buttons for the post grid and product grid.
+     *
+     * Shared by views/common/pagination.php and the post grid pagination AJAX
+     * handler, so the page math is guarded once: the divisor is never 0, and
+     * `max_pages` caps the page-button loop when the total comes from the client.
+     *
+     * @param mixed $total    Total number of posts.
+     * @param mixed $per_page Posts per page as stored in the query data.
+     * @param array $opts {
+     *     @type mixed  $enableMorePosts   Output nothing unless truthy.
+     *     @type mixed  $loadMoreType      '1' load-more button, '2' numbered pages, '3' prev/next. Null outputs nothing.
+     *     @type mixed  $loadMoreButtonTxt Load-more button text.
+     *     @type mixed  $prevTxt           Previous button text. Null means "<".
+     *     @type mixed  $nextTxt           Next button text. Null means ">".
+     *     @type bool   $wrap              Wrap the buttons in the `.ebpg-pagination` container.
+     *     @type string $parent_class      Extra container class.
+     *     @type int    $max_pages         Page-button cap, 0 for none. Set it whenever $total is client-supplied.
+     * }
+     * @return string HTML. Callers still pass it through wp_kses.
+     */
+    public static function pagination_markup( $total, $per_page, $opts = array() ) {
+        $opts           = is_array( $opts ) ? $opts : array();
+        $load_more_type = isset( $opts[ 'loadMoreType' ] ) && is_scalar( $opts[ 'loadMoreType' ] ) ? $opts[ 'loadMoreType' ] : null;
+        $enabled        = isset( $opts[ 'enableMorePosts' ] ) && is_scalar( $opts[ 'enableMorePosts' ] ) && $opts[ 'enableMorePosts' ];
+
+        if ( ! is_scalar( $total ) || ! is_numeric( $total ) || ! $enabled || null === $load_more_type ) {
+            return '';
+        }
+
+        $total    = max( 0, (int) $total );
+        $per_page = is_scalar( $per_page ) ? (int) $per_page : 0;
+
+        // TODO(decision): Q1 — per_page -1 means "show all". Its markup is kept as shipped (a load-more
+        // button, or prev/next without page buttons) until it's decided whether -1 is a supported setting.
+        $show_all = -1 === $per_page;
+
+        // Page with the size WP_Query uses (0/"" = Reading setting, negatives made positive); never 0.
+        $page_size = $show_all ? 0 : QueryHelper::effective_per_page( $per_page );
+
+        if ( ! $show_all && $total <= $page_size ) {
+            return '';
+        }
+
+        $html = '';
+
+        if ( $load_more_type === '1' ) {
+            $html .= sprintf(
+                '<button class="btn ebpg-pagination-button" data-pagenumber="1">%1$s</button>',
+                esc_html( self::pagination_text( $opts, 'loadMoreButtonTxt', '' ) )
+            );
+        }
+
+        if ( $load_more_type === '2' || $load_more_type === '3' ) {
+            $total_pages = $show_all ? 0 : (int) ceil( $total / $page_size );
+            $max_pages   = isset( $opts[ 'max_pages' ] ) && is_numeric( $opts[ 'max_pages' ] ) ? (int) $opts[ 'max_pages' ] : 0;
+            if ( $max_pages > 0 ) {
+                $total_pages = min( $total_pages, $max_pages );
+            }
+
+            $html .= sprintf(
+                '<button class="ebpg-pagination-item-previous">%1$s</button>',
+                esc_html( self::pagination_text( $opts, 'prevTxt', '<' ) )
+            );
+            for ( $i = 1; $i <= $total_pages; $i++ ) {
+                $active = $i == 1 ? "active" : "";
+
+                $html .= sprintf(
+                    '<button class="ebpg-pagination-item %2$s" data-pagenumber="%1$s">
+                        %1$s
+                    </button>',
+                    $i,
+                    $active
+                );
+            }
+            $html .= sprintf(
+                '<button class="ebpg-pagination-item-next">%1$s</button>',
+                esc_html( self::pagination_text( $opts, 'nextTxt', '>' ) )
+            );
+        }
+
+        if ( ! empty( $opts[ 'wrap' ] ) ) {
+            $parent_class = isset( $opts[ 'parent_class' ] ) && is_string( $opts[ 'parent_class' ] ) ? $opts[ 'parent_class' ] : '';
+            $html         = sprintf(
+                '<div class="%1$s ebpg-pagination %2$s">',
+                esc_attr( $parent_class ),
+                $load_more_type === '3' ? "prev-next-btn" : ""
+            ) . $html . '</div>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * @param array  $opts
+     * @param string $key
+     * @param string $default Used when the option is missing or not a scalar.
+     * @return string
+     */
+    private static function pagination_text( $opts, $key, $default ) {
+        return isset( $opts[ $key ] ) && is_scalar( $opts[ $key ] ) ? (string) $opts[ $key ] : $default;
+    }
+
+    /**
+     * Convert Recursive Array to String
+     *
+     * @param array   $array
+     * @param string  $seperator
+     * @param boolean $valueOnly | optional
+     * @return string
+     */
+    public static function recursive_implode( $array, $seperator, $valueOnly = false ) {
+        $result = '';
+        if ( isset( $array[ 'value' ] ) && $valueOnly ) {
+            $array = $array[ 'value' ];
+        }
+        if ( is_array( $array ) ) {
+            foreach ( $array as $key => $value ) {
+                if ( is_array( $value ) ) {
+                    $result .= self::recursive_implode( $value, $seperator, true ) . $seperator;
+                } else {
+                    $result .= $value . $seperator;
+                }
+            }
+        } elseif ( is_string( $array ) ) {
+            $result .= $array . $seperator;
+        }
+        $result = substr( $result, 0, 0 - strlen( $seperator ) );
+
+        return $result;
+    }
+
+    public static function recursive_implode_acf( $array, $seperator ) {
+        $result = '';
+        if ( is_array( $array ) ) {
+            foreach ( $array as $key => $value ) {
+                if ( is_array( $value ) || is_object( $value ) ) {
+                    $result .= self::recursive_implode_acf( (array) $value, $seperator );
+                } else {
+                    $value = $value ? $value : 'Null';
+                    $index = is_numeric( $key ) ? '' : $key . ': ';
+                    $result .= $index . $value . $seperator;
+                }
+            }
+        } elseif ( is_string( $array ) ) {
+            $result .= $array . $seperator;
+        }
+
+        return $result;
+    }
+
+    /**
+     * check isset & not empty and return data
+     */
+    public static function get_data( $arr, $key, $default = null ) {
+        return isset( $arr[ $key ] ) && ! empty( $arr[ $key ] ) ? $arr[ $key ] : $default;
+    }
+
+    /**
+     * array of object to string
+     */
+    public static function array_column_from_json( $arr, $handle, $json = true ) {
+        $arr = $json ? json_decode( $arr, true ) : $arr;
+        $arr = array_column( $arr, $handle );
+
+        return $arr;
+    }
+
+    /**
+     * Is Gutenberg Editor
+     */
+    public static function eb_is_gutenberg_editor( $pagenow, $param ) {
+        if ( 'post-new.php' == $pagenow || 'post.php' == $pagenow || 'site-editor.php' == $pagenow ) {
+            return true;
+        }
+
+        if ( 'themes.php' == $pagenow && ! empty( $param ) && str_contains( $param, 'gutenberg-edit-site' ) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function eb_get_icon_type( $value ) {
+        if ( strpos( $value, 'fa-' ) !== false ) {
+            return 'fontawesome';
+        }
+        return 'dashicon';
+    }
+
+    public static function eb_render_icon( $icon_type, $class_name, $icon ) {
+        if ( 'dashicon' === $icon_type ) {
+            // Render Dashicon
+            return '<span class="dashicon dashicons ' . $icon . ' ' . $class_name . '"></span>';
+        } elseif ( 'fontawesome' === $icon_type ) {
+            // Render FontAwesome icon
+            return '<i class="' . $icon . ' ' . $class_name . '"></i>';
+        }
+
+        // Handle other icon types or return an error message
+        return esc_html__( "Invalid icon type", "essential-blocks" );
+    }
+
+    /**
+     * Get HTML for a gallery image.
+     *
+     * Hooks: woocommerce_gallery_thumbnail_size, woocommerce_gallery_image_size and woocommerce_gallery_full_size accept name based image sizes, or an array of width/height values.
+     *
+     * @param int  $attachment_id Attachment ID.
+     * @param bool $main_image Is this the main image or a thumbnail?.
+     * @return string
+     */
+    public static function get_product_gallery_image_html( $attachment_id, $main_image = false ) {
+        $gallery_thumbnail = wc_get_image_size( 'gallery_thumbnail' );
+        $thumbnail_size    = apply_filters( 'woocommerce_gallery_thumbnail_size', array( $gallery_thumbnail[ 'width' ], $gallery_thumbnail[ 'height' ] ) );
+        $image_size        = apply_filters( 'woocommerce_gallery_image_size', $main_image ? 'woocommerce_single' : $thumbnail_size );
+        $full_size         = apply_filters( 'woocommerce_gallery_full_size', apply_filters( 'woocommerce_product_thumbnails_large_size', 'full' ) );
+        $thumbnail_src     = wp_get_attachment_image_src( $attachment_id, $thumbnail_size );
+        $full_src          = wp_get_attachment_image_src( $attachment_id, $full_size );
+        $alt_text          = trim( wp_strip_all_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
+        $image             = wp_get_attachment_image(
+            $attachment_id,
+            $image_size,
+            false,
+            array(
+                'class' => 'eb-product-gallery-image',
+                'alt' => $alt_text,
+                'data-large_image' => esc_url( $full_src[ 0 ] ),
+                'data-large_image_width' => esc_attr( $full_src[ 1 ] ),
+                'data-large_image_height' => esc_attr( $full_src[ 2 ] )
+            )
+        );
+
+        return $image;
+    }
+
+    /**
+     * return value from json array
+     *
+     * @param array $arr
+     *
+     * @return array
+     */
+    public static function get_value_from_json_array( $arr ) {
+        if ( isset( $arr ) && is_array( $arr ) && count( $arr ) > 0 ) {
+            $values = array();
+            foreach ( $arr as $key => $value ) {
+                if ( is_array( $value ) && count( $value ) > 0 && isset( $value[ 'value' ] ) ) {
+                    array_push( $values, $value[ 'value' ] );
+                }
+            }
+
+            if ( count( $values ) > 0 ) {
+                return $values;
+            }
+        }
+        return array();
+    }
+
+    /**
+     * Essential Blocks Settings (by key)
+     *
+     * @param string $key array key.
+     *
+     * @return array | boolean
+     * @since   5.1.0
+     */
+    public static function get_eb_settings( $key = '' ) {
+        $settings = get_option( 'eb_settings', array() );
+        if ( strlen( $key ) > 0 ) {
+            if ( isset( $settings[ $key ] ) ) {
+                return $settings[ $key ];
+            } else {
+                return false;
+            }
+        }
+        return $settings;
+    }
+
+    /**
+     * Version Update warning
+     *
+     * @param mixed $current_version
+     * @param mixed $new_version
+     * @return void
+     */
+    public static function version_update_warning( $current_version, $new_version, $upgrade_notice ) {
+        $current_version_minor_part = explode( '.', $current_version )[ 1 ];
+        $new_version_minor_part     = explode( '.', $new_version )[ 1 ];
+
+        $notice = '';
+
+        if ( $current_version_minor_part === $new_version_minor_part ) {
+            if ( ! $upgrade_notice ) {
+                return;
+            }
+        }
+
+        if ( $current_version_minor_part !== $new_version_minor_part ) {
+            $notice .= 'We highly recommend you to backup your site before upgrading to the new version.';
+        }
+
+        ?>
+<style>
+hr.eb-update-warning__separator {
+    margin: 15px -13px;
+    border-color: #dba618;
+}
+
+.eb-update-warning .dashicons {
+    display: inline-block;
+    color: #F49B07;
+}
+
+.eb-update-warning .eb-update-warning__title {
+    display: inline-block;
+    font-size: 1.05em;
+    color: #444;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.eb-update-warning__message {
+    margin-bottom: 15px;
+}
+
+.update-message.notice-warning p:empty {
+    display: none;
+}
+</style>
+<hr class="eb-update-warning__separator" />
+<div class="eb-update-warning">
+    <div>
+        <span class="dashicons dashicons-info"></span>
+        <div class="eb-update-warning__title">
+            <?php echo esc_html__( 'Heads up!', 'essential-blocks' ); ?>
+        </div>
+        <div class="eb-update-warning__message">
+            <?php echo wp_kses_post( $notice ); ?>
+        </div>
+
+        <?php
+            if ( false !== $upgrade_notice ) {
+                    ?>
+        <hr class="eb-update-warning__separator" />
+        <div class="eb-update-warning__message">
+            <span class="dashicons dashicons-info"></span>
+            <div class="eb-update-warning__title">
+                <?php echo esc_html__( 'What\'s new?', 'essential-blocks' ); ?>
+            </div>
+            <div class="eb-update-warning__message">
+                <?php echo wp_kses_post( $upgrade_notice ); ?>
+            </div>
+        </div>
+        <?php
+        }?>
+    </div>
+</div>
+<?php
+    }
+}

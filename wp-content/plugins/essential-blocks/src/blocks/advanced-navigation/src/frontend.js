@@ -1,0 +1,198 @@
+function ebAdvancedNavigationInit() {
+    const advNavs = document.querySelectorAll(
+        ".eb-advanced-navigation-wrapper"
+    );
+
+    // Responsive
+    function ebResponsiveNav(selector) {
+        var elements = document.querySelectorAll(selector);
+        elements.forEach(function (element) {
+            // Insert indicator for parent menu items.
+            // Use insertAdjacentHTML instead of `innerHTML +=` so we don't re-parse
+            // and destroy existing children — that strips WP core's Interactivity
+            // API bindings (data-wp-*) on the nav, which breaks the hamburger menu
+            // and causes "Failed to resolve module specifier @wordpress/interactivity".
+            var parentItems = element.querySelectorAll('.wp-block-navigation.is-responsive > li.wp-block-navigation-submenu');
+            parentItems.forEach(function (parentItem) {
+                if (!parentItem.querySelector(':scope > .eb-menu-indicator')) {
+                    parentItem.insertAdjacentHTML('beforeend', '<span class="eb-menu-indicator"></span>');
+                }
+            });
+            // Insert indicator for submenu items
+            var submenuItems = element.querySelectorAll('.wp-block-navigation.is-responsive > li ul li.wp-block-navigation-submenu');
+            submenuItems.forEach(function (submenuItem) {
+                if (!submenuItem.querySelector(':scope > .eb-menu-indicator')) {
+                    submenuItem.insertAdjacentHTML('beforeend', '<span class="eb-menu-indicator"></span>');
+                }
+            });
+
+            // Add event listener for toggle button
+            // element.nextElementSibling.addEventListener('click', function (e) {
+            //     e.preventDefault();
+            //     var navMenu = this.previousElementSibling;
+            //     if (navMenu.style.display === 'none' || navMenu.style.display === '') {
+            //         navMenu.style.display = 'block';
+            //     } else {
+            //         navMenu.style.display = 'none';
+            //     }
+            //     // this.classList.toggle('eb-menu-toggle-open');
+            // });
+
+            // Clear responsive properties
+            function clearResponsiveProps() {
+                var navMenu = element.querySelector('.wp-block-navigation.is-responsive');
+
+                if (navMenu) {
+                    var menuIndicators = element.querySelectorAll('.eb-menu-indicator');
+                    menuIndicators.forEach(function (indicator) {
+                        indicator.classList.remove('eb-menu-indicator-open');
+                    });
+                    var allMenus = element.querySelectorAll('.nav-menu, .nav-menu ul');
+                    allMenus.forEach(function (menu) {
+                        menu.style.display = '';
+                    });
+                }
+            }
+
+            // window.addEventListener('resize', clearResponsiveProps);
+            // window.addEventListener('load', clearResponsiveProps);
+
+            // Add event listener for menu indicators
+            element.addEventListener('click', function (e) {
+                if (e.target.classList.contains('eb-menu-indicator')) {
+                    e.preventDefault();
+                    e.target.classList.toggle('eb-menu-indicator-open');
+                    var submenu = e.target.previousElementSibling;
+                    if (submenu.style.display === 'none' || submenu.style.display === '') {
+                        submenu.style.display = 'block';
+                    } else {
+                        submenu.style.display = 'none';
+                    }
+                }
+            });
+
+
+
+        });
+    }
+
+    for (let advNav of advNavs) {
+        let anchors = advNav.querySelectorAll(
+            ".wp-block-navigation-item__content"
+        );
+
+        // Close the mobile drawer through core's own close control, never by
+        // stripping `is-menu-open` / `has-modal-open` off the DOM. Those classes
+        // mirror core/navigation's Interactivity state
+        // (`data-wp-class--is-menu-open="state.isMenuOpen"`). Removing them by hand
+        // leaves `state.menuOpenedBy.click` true; a same-page #hash jump doesn't
+        // reload, so the next hamburger tap re-sets an already-true value, nothing
+        // re-renders and the menu never reopens. Clicking the close control runs
+        // `actions.closeMenuOnClick` synchronously, so state is reset before the
+        // browser performs the native anchor jump (no preventDefault/window.open).
+        anchors.forEach((anchor) => {
+            anchor.addEventListener("click", function () {
+                if (anchor.hash === "") {
+                    return;
+                }
+
+                const container = anchor.closest(
+                    ".wp-block-navigation__responsive-container"
+                );
+                if (!container?.classList.contains("is-menu-open")) {
+                    return;
+                }
+
+                // Second selector: a custom overlay template part (WP 7.1+) can
+                // replace the default close button with its own close block.
+                container
+                    .querySelector(
+                        '.wp-block-navigation__responsive-container-close, [data-wp-on--click="actions.closeMenuOnClick"]'
+                    )
+                    ?.click();
+            });
+        });
+
+        // anchor nav active class
+        anchors.forEach((anchor) => {
+            anchor
+                .closest(".wp-block-navigation-item")
+                ?.classList.remove("active");
+            anchor.addEventListener("click", function (e) {
+                anchors.forEach((a) => {
+                    a.closest(".wp-block-navigation-item")?.classList.remove(
+                        "current-menu-item"
+                    );
+                });
+
+                if (anchor.hash !== "") {
+                    anchor
+                        .closest(".wp-block-navigation-item")
+                        ?.classList.add("current-menu-item");
+                }
+            });
+        });
+
+        // Display indicator
+        const hamburgerOpen = advNav.querySelector('.wp-block-navigation__responsive-container-open');
+        const hamburgerClose = advNav.querySelector('.wp-block-navigation__responsive-container-close');
+
+        hamburgerOpen?.addEventListener("click", function (e) {
+            advNav.querySelectorAll('.eb-menu-indicator').forEach((indicator) => {
+                indicator.style.display = 'block';
+            });
+        });
+        hamburgerClose?.addEventListener("click", function (e) {
+            advNav.querySelectorAll('.eb-menu-indicator').forEach((indicator) => {
+                indicator.style.display = 'none';
+                // Reset expanded submenu state so reopening the drawer doesn't
+                // show submenus already open while indicators read as closed.
+                indicator.classList.remove('eb-menu-indicator-open');
+                if (indicator.previousElementSibling) {
+                    indicator.previousElementSibling.style.display = '';
+                }
+            });
+        });
+    }
+
+    // Call once after the per-wrapper setup so we don't process every wrapper
+    // N times (the selector inside ebResponsiveNav re-queries the whole DOM).
+    ebResponsiveNav('.eb-advanced-navigation-wrapper');
+
+    // Single window.load listener for all wrappers (instead of one per wrapper)
+    // positions each indicator vertically against its sibling anchor.
+    function bindIndicatorPosition() {
+        document
+            .querySelectorAll('.eb-advanced-navigation-wrapper .eb-menu-indicator')
+            .forEach(function (indicator) {
+                indicator.addEventListener('click', function () {
+                    // Parent <li> may use a <button> instead of <a> (rare core
+                    // navigation variant) — bail without crashing if so.
+                    const anchor = this.parentNode.querySelector('a');
+                    if (!anchor) return;
+                    const indicatorHeight = 25;
+                    const elementTop =
+                        anchor.getBoundingClientRect().height - indicatorHeight;
+                    this.style.top = elementTop / 2 + 'px';
+                });
+            });
+    }
+
+    // This init can itself run after `load` has fired (see the readiness guard
+    // below); a `load` listener added then would never fire, so bind right away.
+    if (document.readyState === "complete") {
+        bindIndicatorPosition();
+    } else {
+        window.addEventListener("load", bindIndicatorPosition);
+    }
+}
+
+// Optimization plugins/CDNs can defer, async-load or delay this script until after
+// DOMContentLoaded has fired. A bare DOMContentLoaded listener would then never run,
+// silently leaving the submenu indicators (display:none by default) missing.
+// Same guard as src/blocks/facebook-feed/src/frontend.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", ebAdvancedNavigationInit);
+} else {
+    ebAdvancedNavigationInit();
+}

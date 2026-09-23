@@ -1,0 +1,1281 @@
+/**
+ * WordPress dependencies
+ */
+import { __ } from "@wordpress/i18n";
+import { useEffect } from "@wordpress/element";
+import {
+    SelectControl,
+    ToggleControl,
+    RangeControl,
+    BaseControl,
+    TextControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+    __experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+} from "@wordpress/components";
+import { alignLeft, alignCenter, alignRight } from "@wordpress/icons";
+import { applyFilters } from "@wordpress/hooks";
+
+/**
+ * Internal dependencies
+ */
+
+import {
+    TypographyDropdown,
+    ResponsiveDimensionsControl,
+    ResponsiveRangeController,
+    ColorControl,
+    GradientColorControl,
+    BorderShadowControl,
+    BackgroundControl,
+    DynamicInputControl,
+    SortControl,
+    EBIconPicker,
+    InspectorPanel,
+    ImageComponent,
+    MaskingPanel,
+    EBTextControl
+} from "@essential-blocks/controls";
+
+import objAttributes from "./attributes";
+
+import { typoPrefix_descs, typoPrefix_name, typoPrefix_job } from "./constants/typographyPrefixConstants";
+
+import {
+    wrapperWidth,
+    imageWidth,
+    imageHeight,
+    rangeIconSize,
+    rangeIconPadding,
+    rangeIconDistance,
+    rangeIconRowGap,
+    imgTopBgHeight,
+    cSepWPrefix,
+    sSepWPrefix,
+    cSepHPrefix,
+    sSepHPrefix,
+    sclDeviderPosRight,
+    p9LGap,
+} from "./constants/rangeNames";
+
+import {
+    tmbWrapMarginConst,
+    tmbWrapPaddingConst,
+    tmbDescsPaddingConst,
+    tmbNamePaddingConst,
+    tmbJobPaddingConst,
+    iconsWrapPadding,
+    iconsWrapMargin,
+    imageMarginConst,
+    imagePaddingConst,
+    contentsPad,
+    contentsMargin,
+} from "./constants/dimensionsConstants";
+
+import { WrpBgConst, imgTopBgPrefix, socialWrpBg } from "./constants/backgroundsConstants";
+
+import { WrpBdShadowConst, prefixSocialBdShadow, prefixImgBd, ovlBdPrefix } from "./constants/borderShadowConstants";
+
+import {
+    sizeUnitTypes,
+    IconsHzAligns,
+    separatorTypes,
+    ContentsVerticalAligns,
+    HOVER_EFFECT,
+    HOVER_ALIGN,
+    TITLE_TAGS
+} from "./constants";
+
+function Inspector({ attributes, setAttributes }) {
+    const {
+        resOption,
+        blockId,
+        // blockRoot,
+        // blockMeta,
+
+        //
+        imageUrl,
+        imageNewUrl,
+
+        //
+        imageId,
+        imageAlt,
+        isImgHeightAuto,
+        showDescs,
+        descsColor,
+        jobColor,
+        nameColor,
+        name,
+        jobTitle,
+        description,
+        showSocials,
+        socialDetails,
+        iconsJustify,
+        iconsVAlign,
+        contentsAlign,
+        imageAlign,
+        cSepAlign,
+        sSepAlign,
+        preset,
+        imgBeforeEl,
+        showCSeparator,
+        showSSeparator,
+        cSepType,
+        sSepType,
+        cSepColor,
+        sSepColor,
+        isIconsDevider,
+        icnsDevideColor,
+        icnSepW,
+        icnSepH,
+        hvIcnColor,
+        hvIcnBgc,
+        conVtAlign,
+        isConBgGradient,
+        conBgGradient,
+        conBgColor,
+        imgCnVtAlign,
+        isP9reverse,
+        icnEffect,
+        avatarURL,
+        newWindow,
+        showLinkNewTab,
+        hoverPreset,
+        showDesignation,
+        showSocialTitle,
+        isContentOverlay,
+        socialInImage,
+        titleTag
+    } = attributes;
+
+    const resRequiredProps = {
+        setAttributes,
+        resOption,
+        attributes,
+        objAttributes,
+    };
+
+    useEffect(() => {
+        if (preset === 'preset3') {
+            if (isContentOverlay) {
+                setAttributes({
+                    socialInImage: false,
+                    nameColor: '#fff',
+                    jobColor: '#fff',
+                    descsColor: '#fff',
+                })
+            } else {
+                setAttributes({
+                    socialInImage: true,
+                    nameColor: '#4b4b4b',
+                    jobColor: '#4b4b4b',
+                    descsColor: '#9f9f9f',
+                })
+            }
+
+        }
+
+    }, [isContentOverlay, preset]);
+
+    const onSocialProfileAdd = () => {
+        const socialDetails = [
+            ...attributes.socialDetails,
+            {
+                title: "Facebook",
+                icon: "fab fa-facebook-f",
+                color: "#fff",
+                bgColor: "#A0A8BD",
+                link: "",
+                linkOpenNewTab: false,
+                isExpanded: false,
+            },
+        ];
+
+        setAttributes({ socialDetails });
+    };
+
+    const getSocialDetailsComponents = () => {
+        const onProfileChange = (key, value, position) => {
+            const newSocialDetail = { ...attributes.socialDetails[position] };
+            const newSocialDetails = [...attributes.socialDetails];
+            newSocialDetails[position] = newSocialDetail;
+
+            if (Array.isArray(key)) {
+                key.map((item, index) => {
+                    newSocialDetails[position][item] = value[index];
+                });
+            } else {
+                newSocialDetails[position][key] = value;
+            }
+
+            setAttributes({ socialDetails: newSocialDetails });
+        };
+
+        return attributes.socialDetails.map((each, i) => (
+            <div key={i}>
+                <EBIconPicker
+                    title={__("Social Media", "essential-blocks")}
+                    value={each.icon || null}
+                    onChange={(value) => onProfileChange('icon', value, i)}
+                />
+                <EBTextControl
+                    label={__("Title", "essential-blocks")}
+                    value={each.title}
+                    onChange={(value) => onProfileChange('title', value, i)}
+                    enableAi={true}
+                />
+                <ColorControl
+                    label={__("Icon Color", "essential-blocks")}
+                    color={each.color}
+                    onChange={(value) => onProfileChange('color', value, i)}
+                />
+                <ColorControl
+                    label={__("Icon Background", "essential-blocks")}
+                    color={each.bgColor}
+                    onChange={(value) => onProfileChange('bgColor', value, i)}
+                />
+                <EBTextControl
+                    label={__("URL", "essential-blocks")}
+                    fieldType="url"
+                    value={each.link}
+                    onChange={(value) => onProfileChange('link', value, i)}
+                    placeholder="https://example.com"
+                    help={__(
+                        "Enter a valid URL.",
+                        "essential-blocks"
+                    )}
+                    showValidation={true}
+                    enableSecurity={true}
+                />
+                {showLinkNewTab && (
+                    <ToggleControl
+                        label={__("Open in New Tab", "essential-blocks")}
+                        checked={each.linkOpenNewTab}
+                        onChange={(value) => onProfileChange('linkOpenNewTab', value, i)}
+                        __nextHasNoMarginBottom
+                    />
+                )}
+            </div>
+        ))
+    }
+
+    return (
+        <InspectorPanel advancedControlProps={{
+            marginPrefix: tmbWrapMarginConst,
+            paddingPrefix: tmbWrapPaddingConst,
+            backgroundPrefix: WrpBgConst,
+            borderPrefix: WrpBdShadowConst,
+            hasMargin: true
+        }}>
+            <InspectorPanel.General>
+                <>
+                    <InspectorPanel.PanelBody
+                        title={__("Presets", "essential-blocks")}
+                        initialOpen={true}
+                    >
+                        {preset === "preset5" && (
+                            <>
+                                <ToggleControl
+                                    label={__("Reverse Layout", "essential-blocks")}
+                                    checked={isP9reverse}
+                                    onChange={() =>
+                                        setAttributes({
+                                            isP9reverse: !isP9reverse,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+
+                                <ResponsiveRangeController
+                                    baseLabel={__("Gap", "essential-blocks")}
+                                    controlName={p9LGap}
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                />
+                            </>
+                        )}
+
+                        {preset === "new-preset3" && (
+                            <SelectControl
+                                label={__("Hover Alignment", "essential-blocks")}
+                                value={hoverPreset}
+                                options={HOVER_ALIGN}
+                                onChange={(hoverPreset) => setAttributes({ hoverPreset })}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+
+                        {preset === "preset3" && (
+                            <ToggleControl
+                                label={__(
+                                    "Content Overlay",
+                                    "essential-blocks"
+                                )}
+                                checked={isContentOverlay}
+                                onChange={() =>
+                                    setAttributes({
+                                        isContentOverlay: !isContentOverlay,
+                                    })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+
+                        <ToggleControl
+                            label={__(
+                                "Enable Designation",
+                                "essential-blocks"
+                            )}
+                            checked={showDesignation}
+                            onChange={() =>
+                                setAttributes({
+                                    showDesignation: !showDesignation,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+                        <ToggleControl
+                            label={__(
+                                "Enable Description",
+                                "essential-blocks"
+                            )}
+                            checked={showDescs}
+                            onChange={() =>
+                                setAttributes({
+                                    showDescs: !showDescs,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+                        <ToggleControl
+                            label={__(
+                                "Enable Social Profiles",
+                                "essential-blocks"
+                            )}
+                            checked={showSocials}
+                            onChange={() =>
+                                setAttributes({
+                                    showSocials: !showSocials,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__("Content", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <ImageComponent.GeneralTab
+                            onSelect={({ id, url, alt }) => setAttributes({ imageNewUrl: url, imageId: id, imageAlt: alt })}
+                            onRemove={() => setAttributes({ imageNewUrl: '', imageId: null, imageAlt: '' })}
+                            value={imageNewUrl}
+                            hasTag={false}
+                            hasCaption={false}
+                            hasStyle={false}
+                            hasLink={false}
+                            showInPanel={false}
+                        />
+
+                        {imageNewUrl && (
+                            <>
+                                <EBTextControl
+                                    label={__(
+                                        "URL",
+                                        "essential-blocks"
+                                    )}
+                                    fieldType="url"
+                                    value={avatarURL || ''}
+                                    onChange={(newURL) =>
+                                        setAttributes({
+                                            avatarURL: newURL,
+                                        })
+                                    }
+                                    placeholder="https://example.com"
+                                    help={__(
+                                        "Enter a valid URL.",
+                                        "essential-blocks"
+                                    )}
+                                    showValidation={true}
+                                    enableSecurity={true}
+                                />
+                                <DynamicInputControl
+                                    label={__(
+                                        "Title",
+                                        "essential-blocks"
+                                    )}
+                                    attrName="name"
+                                    inputValue={name}
+                                    setAttributes={
+                                        setAttributes
+                                    }
+                                    onChange={(newName) =>
+                                        setAttributes({
+                                            name: newName,
+                                        })
+                                    }
+                                />
+                                <DynamicInputControl
+                                    label={__(
+                                        "Designation",
+                                        "essential-blocks"
+                                    )}
+                                    attrName="jobTitle"
+                                    inputValue={jobTitle}
+                                    setAttributes={
+                                        setAttributes
+                                    }
+                                    onChange={(newJobTitle) =>
+                                        setAttributes({
+                                            jobTitle: newJobTitle,
+                                        })
+                                    }
+                                />
+                                <DynamicInputControl
+                                    label={__(
+                                        "Description",
+                                        "essential-blocks"
+                                    )}
+                                    attrName="description"
+                                    inputValue={description}
+                                    setAttributes={
+                                        setAttributes
+                                    }
+                                    onChange={(newDescription) =>
+                                        setAttributes({
+                                            description: newDescription,
+                                        })
+                                    }
+                                    isTextarea={true}
+                                />
+                                {avatarURL && (
+                                    <ToggleControl
+                                        label={__("Open in New Tab", "essential-blocks")}
+                                        checked={newWindow}
+                                        onChange={() =>
+                                            setAttributes({
+                                                newWindow: !newWindow,
+                                            })
+                                        }
+                                        __nextHasNoMarginBottom
+                                    />
+                                )}
+                            </>
+                        )}
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__(
+                            "Social Profiles",
+                            "essential-blocks"
+                        )}
+                    // initialOpen={false}
+                    >
+                        <>
+
+                            {showSocials && (
+                                <>
+                                    <ToggleControl
+                                        label={__("Show link in new tab", "essential-blocks")}
+                                        checked={showLinkNewTab}
+                                        onChange={() =>
+                                            setAttributes({
+                                                showLinkNewTab: !showLinkNewTab,
+                                                socialDetails: [...socialDetails]
+                                            })
+                                        }
+                                        __nextHasNoMarginBottom
+                                    />
+
+                                    <SortControl
+                                        items={attributes.socialDetails}
+                                        labelKey={'title'}
+                                        onSortEnd={socialDetails => setAttributes({ socialDetails })}
+                                        onDeleteItem={index => {
+                                            setAttributes({ socialDetails: attributes.socialDetails.filter((each, i) => i !== index) })
+                                        }}
+                                        hasSettings={true}
+                                        settingsComponents={getSocialDetailsComponents()}
+                                        hasAddButton={true}
+                                        onAddItem={onSocialProfileAdd}
+                                        addButtonText={__(
+                                            "Add Social Profile",
+                                            "essential-blocks"
+                                        )}
+                                    />
+                                </>
+                            )}
+                        </>
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__(
+                            "Separators",
+                            "essential-blocks"
+                        )}
+                    // initialOpen={false}
+                    >
+                        <ToggleControl
+                            label={__("Enable Content Separator", "essential-blocks")}
+                            checked={showCSeparator}
+                            onChange={() =>
+                                setAttributes({
+                                    showCSeparator: !showCSeparator,
+                                })
+                            }
+                            __nextHasNoMarginBottom
+                        />
+
+                        {showSocials && "preset3" !== preset && (
+                            <ToggleControl
+                                label={__("Enable Social Separator", "essential-blocks")}
+                                checked={showSSeparator}
+                                onChange={() =>
+                                    setAttributes({
+                                        showSSeparator: !showSSeparator,
+                                    })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+                        )}
+                    </InspectorPanel.PanelBody>
+                    <MaskingPanel />
+                </>
+            </InspectorPanel.General>
+            <InspectorPanel.Style>
+                <>
+                    <InspectorPanel.PanelBody
+                        title={__(
+                            "Container width",
+                            "essential-blocks"
+                        )}
+                        initialOpen={true}
+                    >
+                        <ResponsiveRangeController
+                            baseLabel={__("Max Width", "essential-blocks")}
+                            controlName={wrapperWidth}
+                            min={100}
+                            max={2000}
+                            step={1}
+                        />
+                    </InspectorPanel.PanelBody>
+
+                    {/preset[2,3,4,8,9]|new-preset1|new-preset2|new-preset3/i.test(
+                        preset || ""
+                    ) && (
+                            <InspectorPanel.PanelBody
+                                title={__(
+                                    "Overlay Contents",
+                                    "essential-blocks"
+                                )}
+                            // initialOpen={false}
+                            >
+                                {/preset[3,4,]|new-preset1|new-preset2|new-preset3/i.test(
+                                    preset || ""
+                                ) && (
+                                        <>
+                                            <ResponsiveDimensionsControl
+                                                controlName={
+                                                    contentsMargin
+                                                }
+                                                baseLabel="margin"
+                                            />
+
+                                            <ResponsiveDimensionsControl
+                                                controlName={
+                                                    contentsPad
+                                                }
+                                                baseLabel="Padding"
+                                            />
+
+                                            {preset === "preset4" &&
+                                                preset ===
+                                                "new-preset1" && (
+                                                    <>
+                                                        <ToggleGroupControl
+                                                            label="Vertical alignments"
+
+                                                            value={conVtAlign}
+                                                            onChange={(value) =>
+                                                                setAttributes({
+                                                                    conVtAlign: value,
+                                                                })
+                                                            }
+                                                            isBlock
+                                                            __next40pxDefaultSize
+                                                            __nextHasNoMarginBottom
+                                                        >
+                                                            {ContentsVerticalAligns.map(
+                                                                (
+                                                                    {
+                                                                        value,
+                                                                        label,
+                                                                    },
+                                                                    index
+                                                                ) => (
+                                                                    <ToggleGroupControlOption
+                                                                        key={index}
+                                                                        value={value}
+                                                                        label={label}
+                                                                    />
+                                                                )
+                                                            )}
+                                                        </ToggleGroupControl>
+                                                    </>
+                                                )}
+
+                                            <BorderShadowControl
+                                                controlName={
+                                                    ovlBdPrefix
+                                                }
+                                                // noShadow
+                                                noBdrHover
+                                            // noBorder
+                                            // noShdowHover
+                                            />
+                                        </>
+                                    )}
+                                <BaseControl
+                                    label={__(
+                                        "Background",
+                                        "essential-blocks"
+                                    )}
+                                    __nextHasNoMarginBottom
+                                ></BaseControl>
+                                <ToggleControl
+                                    label={__(
+                                        "Use Background Gradient",
+                                        "essential-blocks"
+                                    )}
+                                    checked={isConBgGradient}
+                                    onChange={() =>
+                                        setAttributes({
+                                            isConBgGradient: !isConBgGradient,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+
+                                {isConBgGradient ? (
+                                    <GradientColorControl
+                                        gradientColor={
+                                            conBgGradient
+                                        }
+                                        onChange={(conBgGradient) =>
+                                            setAttributes({
+                                                conBgGradient,
+                                            })
+                                        }
+                                    />
+                                ) : (
+                                    <ColorControl
+                                        label={__(
+                                            "Color",
+                                            "essential-blocks"
+                                        )}
+                                        color={conBgColor}
+                                        attributeName={'conBgColor'}
+                                    />
+                                )}
+
+                                {applyFilters(
+                                    "eb_team_member_preset8_shadow",
+                                    "",
+                                    attributes,
+                                    setAttributes,
+                                    resRequiredProps
+                                )}
+
+                                <style>
+                                    {`${preset === "preset2"
+                                        ? `
+
+					div.${blockId}.eb-team-wrapper div.contents{
+						top: 50%;
+					}
+
+				`
+                                        : ""
+                                        }
+
+
+												${preset === "preset3"
+                                            ? `
+				div.${blockId}.eb-team-wrapper ul.socials {
+					opacity: 1;
+				}
+														`
+                                            : ""
+                                        }
+
+
+												${preset === "preset4"
+                                            ? `
+				div.${blockId}.eb-team-wrapper div.contents {
+					opacity: 1;
+				}
+														`
+                                            : ""
+                                        }
+
+												`}
+                                </style>
+                            </InspectorPanel.PanelBody>
+                        )}
+                    <InspectorPanel.PanelBody
+                        title={__(
+                            "Alignments",
+                            "essential-blocks"
+                        )}
+                    >
+                        {preset === "preset5" ? (
+                            <BaseControl
+                                id="eb-team-avatar-vertical-alignments"
+                                label="Avatar/Content Vertical Alignment"
+                                __nextHasNoMarginBottom
+                            >
+                                <SelectControl
+                                    // label={__("Icons Horizontal Alignment", "essential-blocks")}
+                                    value={imgCnVtAlign}
+                                    options={ContentsVerticalAligns}
+                                    onChange={(imgCnVtAlign) =>
+                                        setAttributes({
+                                            imgCnVtAlign,
+                                        })
+                                    }
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                />
+                            </BaseControl>
+                        ) : (
+                            <ToggleGroupControl
+                                label={__("Avatar Horizontal Alignments", "essential-blocks")}
+                                value={imageAlign}
+                                onChange={(value) => setAttributes({ imageAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                            </ToggleGroupControl>
+                        )}
+
+                        <ToggleGroupControl
+                            label={__("Contents Horizontal Alignments", "essential-blocks")}
+                            value={contentsAlign}
+                            onChange={(value) => setAttributes({ contentsAlign: value })}
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                            <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                            <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                        </ToggleGroupControl>
+
+                        {showSocials && (
+                            <>
+                                <BaseControl
+                                    id="eb-team-icons-alignments"
+                                    label="Social Icons Horizontal Alignments"
+                                    __nextHasNoMarginBottom
+                                >
+                                    <SelectControl
+                                        // label={__("Icons Horizontal Alignment", "essential-blocks")}
+                                        value={iconsJustify}
+                                        options={IconsHzAligns}
+                                        onChange={(iconsJustify) =>
+                                            setAttributes({
+                                                iconsJustify,
+                                            })
+                                        }
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
+                                    />
+                                </BaseControl>
+
+                                {preset === "preset3" && (
+                                    <BaseControl
+                                        id="eb-team-icons-alignments"
+                                        label="Social Icons Vertical Alignments"
+                                        __nextHasNoMarginBottom
+                                    >
+                                        <SelectControl
+                                            // label={__("Icons Horizontal Alignment", "essential-blocks")}
+                                            value={iconsVAlign}
+                                            options={ContentsVerticalAligns}
+                                            onChange={(iconsVAlign) =>
+                                                setAttributes({
+                                                    iconsVAlign,
+                                                })
+                                            }
+                                            __next40pxDefaultSize
+                                            __nextHasNoMarginBottom
+                                        />
+                                    </BaseControl>
+                                )}
+                            </>
+                        )}
+
+                        {showCSeparator && (
+                            <ToggleGroupControl
+                                label={__("Content Separator Alignment", "essential-blocks")}
+                                value={cSepAlign}
+                                onChange={(value) => setAttributes({ cSepAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                            </ToggleGroupControl>
+                        )}
+
+                        {showSocials && showSSeparator && (
+                            <ToggleGroupControl
+                                label={__("Social Separator Alignment", "essential-blocks")}
+                                value={sSepAlign}
+                                onChange={(value) => setAttributes({ sSepAlign: value })}
+                                isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            >
+                                <ToggleGroupControlOptionIcon value="left" icon={alignLeft} label={__("Left", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="center" icon={alignCenter} label={__("Center", "essential-blocks")} />
+                                <ToggleGroupControlOptionIcon value="right" icon={alignRight} label={__("Right", "essential-blocks")} />
+                            </ToggleGroupControl>
+                        )}
+                    </InspectorPanel.PanelBody>
+                    <InspectorPanel.PanelBody title={__("Avatar", "essential-blocks")} initialOpen={false}>
+                        {imageNewUrl && (
+                            <>
+                                <ResponsiveRangeController
+                                    baseLabel={__("Image Width", "essential-blocks")}
+                                    controlName={imageWidth}
+                                    units={sizeUnitTypes}
+                                    max={2000}
+                                />
+                                <ToggleControl
+                                    label={__("Auto Image Height", "essential-blocks")}
+                                    checked={isImgHeightAuto}
+                                    onChange={() =>
+                                        setAttributes({
+                                            isImgHeightAuto: !isImgHeightAuto,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+
+                                {!isImgHeightAuto && (
+                                    <ResponsiveRangeController
+                                        baseLabel={__("Image Height", "essential-blocks")}
+                                        controlName={imageHeight}
+                                        units={sizeUnitTypes}
+                                        max={2000}
+                                    />
+                                )}
+
+                                <ResponsiveDimensionsControl
+                                    controlName={imageMarginConst}
+                                    baseLabel="Margin"
+                                />
+
+                                <ResponsiveDimensionsControl
+                                    controlName={imagePaddingConst}
+                                    baseLabel="Padding"
+                                />
+
+                                <BorderShadowControl
+                                    controlName={prefixImgBd}
+                                // noShadow
+                                // noBorder
+                                />
+
+                                <ToggleControl
+                                    label={__("Enable Background before Image", "essential-blocks")}
+                                    checked={imgBeforeEl}
+                                    onChange={() =>
+                                        setAttributes({
+                                            imgBeforeEl: !imgBeforeEl,
+                                        })
+                                    }
+                                    __nextHasNoMarginBottom
+                                />
+
+                                {imgBeforeEl && (
+                                    <>
+                                        <BackgroundControl
+                                            noOverlay
+                                            noMainBgi
+                                            controlName={imgTopBgPrefix}
+                                        />
+
+                                        <ResponsiveRangeController
+                                            noUnits
+                                            baseLabel={__("Height", "essential-blocks")}
+                                            controlName={imgTopBgHeight}
+                                            min={0}
+                                            max={300}
+                                            step={1}
+                                        />
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </InspectorPanel.PanelBody>
+
+                    <InspectorPanel.PanelBody
+                        title={__("Name", "essential-blocks")}
+                        initialOpen={false}
+                    >
+                        <ToggleGroupControl
+                            label={__("Tag", "essential-blocks")}
+                            className="eb-advance-heading-alignment eb-html-tag-buttongroup newtogglegroupcontrol"
+                            value={titleTag}
+                            onChange={(value) =>
+                                setAttributes({ titleTag: value })
+                            }
+                            isBlock
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        >
+                            {TITLE_TAGS.map((item, key) => (
+                                <ToggleGroupControlOption
+                                    key={key}
+                                    value={item.value}
+                                    label={item.label}
+                                />
+                            ))}
+                        </ToggleGroupControl>
+                        <ColorControl
+                            label={__("Color", "essential-blocks")}
+                            color={nameColor}
+                            attributeName={'nameColor'}
+                        />
+                        <TypographyDropdown
+                            baseLabel="Typography"
+                            typographyPrefixConstant={typoPrefix_name}
+                        />
+
+                        <ResponsiveDimensionsControl
+                            controlName={tmbNamePaddingConst}
+                            baseLabel="Padding"
+                        />
+                    </InspectorPanel.PanelBody>
+                    <InspectorPanel.PanelBody title={__("Job Title", "essential-blocks")} initialOpen={false}>
+                        <ColorControl
+                            label={__("Color", "essential-blocks")}
+                            color={jobColor}
+                            attributeName={'jobColor'}
+                        />
+                        <TypographyDropdown
+                            baseLabel="Typography"
+                            typographyPrefixConstant={typoPrefix_job}
+                        />
+
+                        <ResponsiveDimensionsControl
+                            controlName={tmbJobPaddingConst}
+                            baseLabel="Padding"
+                        />
+                    </InspectorPanel.PanelBody>
+                    <InspectorPanel.PanelBody
+                        title={__(
+                            "Description",
+                            "essential-blocks"
+                        )}
+                        initialOpen={false}
+                    >
+
+
+                        {showDescs && (
+                            <>
+                                <ColorControl
+                                    label={__("Color", "essential-blocks")}
+                                    color={descsColor}
+                                    attributeName={'descsColor'}
+                                />
+
+                                <TypographyDropdown
+                                    baseLabel="Typography"
+                                    typographyPrefixConstant={typoPrefix_descs}
+                                />
+
+                                <ResponsiveDimensionsControl
+                                    controlName={tmbDescsPaddingConst}
+                                    baseLabel="Padding"
+                                />
+                            </>
+                        )}
+                    </InspectorPanel.PanelBody>
+                    {showSocials && (
+                        <InspectorPanel.PanelBody title={__("Social Icons", "essential-blocks")} initialOpen={false}>
+                            <ColorControl
+                                label={__("Hover Color", "essential-blocks")}
+                                color={hvIcnColor}
+                                attributeName={'hvIcnColor'}
+                            />
+
+                            <ColorControl
+                                label={__("Hover Background", "essential-blocks")}
+                                color={hvIcnBgc}
+                                attributeName={'hvIcnBgc'}
+                            />
+
+                            <ResponsiveRangeController
+                                noUnits
+                                baseLabel={__("Size", "essential-blocks")}
+                                controlName={rangeIconSize}
+                                min={5}
+                                max={300}
+                                step={1}
+                            />
+
+                            <ResponsiveRangeController
+                                noUnits
+                                baseLabel={__("Padding", "essential-blocks")}
+                                controlName={rangeIconPadding}
+                                min={0}
+                                max={6}
+                                step={0.1}
+                            />
+
+                            <ResponsiveRangeController
+                                noUnits
+                                baseLabel={__("Spacing", "essential-blocks")}
+                                controlName={rangeIconDistance}
+                                min={0}
+                                max={100}
+                                step={1}
+                            />
+
+                            <ResponsiveRangeController
+                                noUnits
+                                baseLabel={__("Rows Gap", "essential-blocks")}
+                                controlName={rangeIconRowGap}
+                                min={0}
+                                max={100}
+                                step={1}
+                            />
+
+                            <label
+                                style={{
+                                    display: "block",
+                                    margin: "-20px 0 20px",
+                                }}
+                            >
+                                <i>
+                                    N.B. 'Rows Gap' is used when you have multiple rows of social
+                                    profiles. Normally in case of only one row, it's not needed
+                                </i>
+                            </label>
+
+                            <ToggleControl
+                                label={__("Icons Devider", "essential-blocks")}
+                                checked={isIconsDevider}
+                                onChange={() =>
+                                    setAttributes({
+                                        isIconsDevider: !isIconsDevider,
+                                    })
+                                }
+                                __nextHasNoMarginBottom
+                            />
+
+                            {isIconsDevider && (
+                                <>
+                                    <ColorControl
+                                        label={__("Color", "essential-blocks")}
+                                        color={icnsDevideColor}
+                                        attributeName={'icnsDevideColor'}
+                                    />
+
+                                    <RangeControl
+                                        label={__("Width", "essential-blocks")}
+                                        value={icnSepW}
+                                        onChange={(icnSepW) =>
+                                            setAttributes({
+                                                icnSepW,
+                                            })
+                                        }
+                                        step={1}
+                                        min={1}
+                                        max={50}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
+                                    />
+
+                                    <RangeControl
+                                        label={__("Height", "essential-blocks")}
+                                        value={icnSepH}
+                                        onChange={(icnSepH) =>
+                                            setAttributes({
+                                                icnSepH,
+                                            })
+                                        }
+                                        step={1}
+                                        min={1}
+                                        max={300}
+                                        __nextHasNoMarginBottom
+                                        __next40pxDefaultSize
+                                    />
+
+                                    <ResponsiveRangeController
+                                        baseLabel={__("Position From Right", "essential-blocks")}
+                                        controlName={sclDeviderPosRight}
+                                        min={0}
+                                        max={80}
+                                        step={1}
+                                    />
+                                </>
+                            )}
+
+                            <SelectControl
+                                label={__("Icon Hover Effect", "essential-blocks")}
+                                value={icnEffect}
+                                options={HOVER_EFFECT}
+                                // onChange={(preset) => setAttributes({ preset })}
+                                onChange={(icnEffect) => {
+                                    setAttributes({
+                                        icnEffect,
+                                    });
+                                }}
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
+                            />
+
+                            <InspectorPanel.PanelBody
+                                title={__("Icons Border", "essential-blocks")}
+                                initialOpen={false}
+                            >
+                                <BorderShadowControl
+                                    controlName={prefixSocialBdShadow}
+                                    noShadow
+                                // noBorder
+                                />
+                            </InspectorPanel.PanelBody>
+
+                            <InspectorPanel.PanelBody
+                                title={__("Container Background ", "essential-blocks")}
+                                initialOpen={false}
+                            >
+                                <BackgroundControl
+                                    controlName={socialWrpBg}
+                                    noMainBgi
+                                    noOverlay
+                                />
+                            </InspectorPanel.PanelBody>
+                            <InspectorPanel.PanelBody
+                                title={__("Container Margin Padding ", "essential-blocks")}
+                                initialOpen={false}
+                            >
+                                <ResponsiveDimensionsControl
+                                    controlName={iconsWrapMargin}
+                                    baseLabel="Margin"
+                                />
+
+                                <ResponsiveDimensionsControl
+                                    controlName={iconsWrapPadding}
+                                    baseLabel="Padding"
+                                />
+                            </InspectorPanel.PanelBody>
+                        </InspectorPanel.PanelBody>
+                    )}
+                    {showCSeparator && (
+                        <InspectorPanel.PanelBody
+                            title={__("Content Separator", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={cSepColor}
+                                attributeName={'cSepColor'}
+                            />
+
+                            <ResponsiveRangeController
+                                baseLabel={__("Width", "essential-blocks")}
+                                controlName={cSepWPrefix}
+                                min={0}
+                                max={800}
+                                step={1}
+                            />
+
+                            <ResponsiveRangeController
+                                baseLabel={__("Height", "essential-blocks")}
+                                controlName={cSepHPrefix}
+                                min={0}
+                                max={20}
+                                step={1}
+                            />
+
+                            <BaseControl label={__("Separator Type", "essential-blocks")} __nextHasNoMarginBottom>
+                                <SelectControl
+                                    // label={__("Design Preset", "essential-blocks")}
+                                    value={cSepType}
+                                    options={separatorTypes}
+                                    // onChange={(preset) => setAttributes({ preset })}
+                                    onChange={(cSepType) => {
+                                        setAttributes({
+                                            cSepType,
+                                        });
+                                    }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                />
+                            </BaseControl>
+                        </InspectorPanel.PanelBody>
+                    )}
+                    {showSocials && showSSeparator && (
+                        <InspectorPanel.PanelBody
+                            title={__("Social Separator", "essential-blocks")}
+                            initialOpen={false}
+                        >
+                            <ColorControl
+                                label={__("Color", "essential-blocks")}
+                                color={sSepColor}
+                                attributeName={'sSepColor'}
+                            />
+
+                            <ResponsiveRangeController
+                                baseLabel={__("Width", "essential-blocks")}
+                                controlName={sSepWPrefix}
+                                min={0}
+                                max={800}
+                                step={1}
+                            />
+
+                            <ResponsiveRangeController
+                                baseLabel={__("Height", "essential-blocks")}
+                                controlName={sSepHPrefix}
+                                min={0}
+                                max={20}
+                                step={1}
+                            />
+
+                            <BaseControl label={__("Separator Type", "essential-blocks")} __nextHasNoMarginBottom>
+                                <SelectControl
+                                    // label={__("Design Preset", "essential-blocks")}
+                                    value={sSepType}
+                                    options={separatorTypes}
+                                    // onChange={(preset) => setAttributes({ preset })}
+                                    onChange={(sSepType) => {
+                                        setAttributes({
+                                            sSepType,
+                                        });
+                                    }}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                />
+                            </BaseControl>
+                        </InspectorPanel.PanelBody>
+                    )}
+                </>
+            </InspectorPanel.Style>
+
+        </InspectorPanel>
+    );
+}
+export default Inspector;

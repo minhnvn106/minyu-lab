@@ -1,0 +1,261 @@
+.wp-block-essential-blocks-slider {
+	// width: 100%;
+	min-width: 0;
+}
+
+.block-editor-block-list__block {
+	.eb-slider-wrapper .eb-slider-type-content .eb-slider-item.content-1 .eb-slider-content {
+		width: 100% !important;
+		height: 100% !important;
+	}
+}
+
+.eb-slider-wrapper {
+	.slick-slide {
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+		pointer-events: none;
+
+		&.slick-active {
+			pointer-events: auto;
+		}
+	}
+
+	.eb-slider-type-image {
+		&:not(.slick-initialized):not(.slick-vertical) {
+			display: flex;
+		}
+
+		.eb-slider-item {
+			img {
+				width: 100%;
+				object-fit: cover;
+				box-sizing: border-box;
+			}
+		}
+	}
+
+	.eb-slider-second-button {
+		background-color: #fff;
+		color: #000;
+	}
+
+	.eb-slider-type-content {
+		position: relative;
+
+		.eb-slider-item {
+			position: relative;
+			overflow: hidden;
+
+			.eb-slider-button-wrapper {
+				display: block;
+			}
+
+			.eb-slider-button,
+			.eb-slider-second-button {
+				text-decoration: none;
+				display: inline-block;
+			}
+
+			img {
+				width: 100%;
+				object-fit: cover;
+				box-sizing: border-box;
+			}
+
+			&.content-1 {
+				.eb-slider-content {
+					position: absolute;
+					left: 50%;
+					top: 50%;
+					width: 100%;
+					height: 100%;
+					padding: 20px 30px;
+					display: flex;
+					flex-flow: column;
+					box-sizing: border-box;
+					transform: translate(-50%, -50%);
+
+					&.align-left .eb-slider-button,
+					&.align-justify .eb-slider-button {
+						align-self: flex-start;
+					}
+
+					&.align-center .eb-slider-button {
+						align-self: center;
+					}
+
+					&.align-right .eb-slider-button {
+						align-self: flex-end;
+					}
+
+					// Content Link Styles
+					&.has-content-link {
+						// position: relative;
+
+						// Create clickable overlay for content area (excluding buttons)
+						&::before {
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 0;
+							right: 0;
+							bottom: 0;
+							z-index: 1;
+							cursor: pointer;
+							transition: all 0.3s ease;
+						}
+
+						&:hover::before {
+							// background-color: rgba(0, 124, 186, 0.1);
+						}
+
+						// Ensure button wrapper is above the overlay
+						.eb-slider-button-wrapper {
+							position: relative;
+							z-index: 2;
+							pointer-events: auto;
+
+							.eb-slider-button,
+							.eb-slider-second-button {
+								pointer-events: auto;
+								position: relative;
+								z-index: 3;
+							}
+						}
+
+						// Make title and subtitle clickable through the overlay
+						.eb-slider-title,
+						.eb-slider-subtitle {
+							position: relative;
+							z-index: 0;
+						}
+					}
+				}
+			}
+
+			&.content-3 {
+				display: flex !important;
+				justify-content: flex-start;
+				flex-direction: row;
+
+				div {
+					flex: 1 1 100%;
+				}
+
+				.eb-slider-content {
+					padding: 0px 15px;
+				}
+			}
+
+			&.content-4 {
+				display: flex !important;
+				justify-content: space-between;
+				flex-direction: row-reverse;
+				flex-wrap: nowrap;
+
+				div {
+					flex: 1 1 100%;
+				}
+
+				.eb-slider-content {
+					padding: 0px 15px;
+				}
+			}
+		}
+	}
+
+	.slick-prev,
+	.slick-next {
+		z-index: 99;
+		text-align: center;
+
+		&::before {
+			content: none;
+		}
+
+		i {
+			font-size: 20px;
+			color: #000;
+		}
+
+		svg {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	ul.slick-dots {
+		margin: 0;
+	}
+
+	.eb-slider-init {
+		*:focus {
+			outline: none;
+		}
+
+		&.slick-initialized {
+			&::before {
+				display: none;
+			}
+
+			.eb-slider-item {
+				visibility: visible;
+			}
+		}
+
+		&::before {
+			background-image: url(../../../assets/images/ajax-loader.gif);
+			background-size: cover;
+			content: "";
+			display: block;
+			height: 50px;
+			left: 50%;
+			position: absolute;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			width: 50px;
+		}
+
+		.eb-slider-item {
+			visibility: hidden;
+		}
+	}
+}
+
+[dir="rtl"] .eb-slider-wrapper {
+
+	.slick-prev,
+	.slick-next {
+
+		&::before {
+			content: none;
+		}
+	}
+
+	.slick-prev {
+		left: auto;
+
+		.fa-arrow-alt-circle-left {
+			transform: rotate(180deg)
+		}
+	}
+
+	.slick-next {
+		right: auto;
+
+		.fa-arrow-alt-circle-right {
+			transform: rotate(180deg)
+		}
+
+	}
+
+	.eb-slider-type-content {
+		.eb-slider-item {
+			.eb-slider-content {
+				text-align: right;
+				direction: rtl;
+			}
+		}
+	}
+}

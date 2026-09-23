@@ -1,0 +1,20 @@
+.eb-accordion-title-content-wrap {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	gap: 10px;
+
+	.eb-accordion-title-prefix-icon {
+		display: inline-flex;
+		align-items: center;
+	}
+}
+
+.eb-accordion-title-wrapper {
+	outline: unset;
+
+	&:focus-visible {
+		outline: 2px solid #5b4cff;
+		outline-offset: 2px;
+	}
+}
