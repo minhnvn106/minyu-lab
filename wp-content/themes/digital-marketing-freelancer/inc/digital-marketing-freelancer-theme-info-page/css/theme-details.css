@@ -1,0 +1,756 @@
+:root {
+  --primary-color: #175fff;
+  --secondary-color: #a8bc17;
+}
+
+/* WordPress Compatibility */
+.appearance_page_digital-marketing-freelancer-theme-info-page #wpcontent,
+.appearance_page_digital-marketing-freelancer-theme-info-page #wpfooter {
+  padding: 0px;
+}
+
+.digital-marketing-freelancer-theme-info-page {
+  font-size: 16px;
+  line-height: 1.2;
+  /* Components */
+}
+.digital-marketing-freelancer-theme-info-page h1,
+.digital-marketing-freelancer-theme-info-page h2,
+.digital-marketing-freelancer-theme-info-page h3,
+.digital-marketing-freelancer-theme-info-page h4,
+.digital-marketing-freelancer-theme-info-page h5,
+.digital-marketing-freelancer-theme-info-page h6 {
+  font-weight: 600;
+  line-height: 1;
+}
+.digital-marketing-freelancer-theme-info-page p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+}
+.digital-marketing-freelancer-theme-info-page a {
+  text-decoration: none;
+}
+.digital-marketing-freelancer-theme-info-page__header {
+  background: linear-gradient(to right, #d4335d, #ff5627);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  min-height: 60px;
+  padding: 24px 40px;
+  gap: 24px;
+}
+.digital-marketing-freelancer-theme-info-page__header--title {
+  color: #fff;
+  font-size: 24px;
+  line-height: 1.6 !important;
+  margin: 0 0 12px;
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__header--title {
+    line-height: 1 !important;
+  }
+}
+.digital-marketing-freelancer-theme-info-page__header--subtitle {
+  color: #ffffff;
+  font-size: 16px;
+}
+.digital-marketing-freelancer-theme-info-page__header--subtitle .theme-current-version {
+  background: -webkit-linear-gradient(left, #00a8d5, #00ddd8) !important;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+.digital-marketing-freelancer-theme-info-page__header--ctawrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 16px;
+}
+.digital-marketing-freelancer-theme-info-page__header--ctawrap a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  gap: 4px;
+  padding: 4px 12px;
+}
+.digital-marketing-freelancer-theme-info-page__header--ctawrap a i {
+  font-size: 18px;
+}
+.digital-marketing-freelancer-theme-info-page__header--ctawrap a:last-child {
+  background-color: #ff4900;
+}
+.digital-marketing-freelancer-theme-info-page__features {
+  padding: 24px;
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__features {
+    padding: 40px;
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap {
+  max-width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 40px;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  margin: 0 auto;
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content {
+    grid-column: span 2;
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec {
+  background-color: #ffffff;
+  padding: 36px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec span {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec h2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 24px;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: 8px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec h2 span {
+  background-color: #f5ffb0;
+  color: #586400;
+  font-size: 12px;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec-cta {
+  background: #f7f7f7;
+  padding: 36px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec-cta__buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 20px;
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec-cta__buttons {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec-cta__buttons a:last-child {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 4px;
+  color: var(--primary-color);
+  font-size: 14px;
+  font-weight: 600;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .welcome-sec-cta__buttons a:last-child svg {
+  fill: var(--primary-color);
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec {
+  background-color: #fff;
+  margin: 36px 0 0;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner {
+  padding: 36px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner h2 {
+  font-size: 24px;
+  margin: 0 0 24px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card {
+  position: relative;
+  border-radius: 4px;
+  padding: 16px;
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.08);
+          box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.08);
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card h4 {
+  color: #d4335d;
+  font-size: 16px;
+  line-height: 1.3;
+  margin: 0 0 12px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card span {
+  color: #6e6e6e;
+  font-size: 14px;
+  font-weight: 600;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card i {
+  position: absolute;
+  color: #000;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  bottom: 12px;
+  right: 12px;
+  /* Smaller Screen */
+}
+@media (min-width: 768px) {
+  .digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card i {
+    top: 16px;
+    right: 16px;
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card i:hover {
+  color: var(--primary-color);
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card:hover {
+  -webkit-box-shadow: 0px 0px 1px 1px #b32d2e;
+          box-shadow: 0px 0px 1px 1px #b32d2e;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card:hover span {
+  color: #000 ;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .getstarted-sec__inner .theme-guidelist .theme-editor-card:hover i {
+  visibility: visible;
+  opacity: 1;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec {
+  background-color: #ffffff;
+  margin: 36px 0 0;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner {
+  padding: 36px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner--header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0 0 24px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 16px;
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner--header {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner--header a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 4px;
+  color: var(--primary-color);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.theme-guidelist a:nth-child(even) {
+  background: rgba(255,64,129,.08);
+}
+
+.theme-guidelist a:nth-child(odd) {
+  background: rgba(255,86,38,.08);
+}
+
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner--header a i {
+  font-size: 16px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner h2 {
+  font-size: 24px;
+  margin: 0;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 24px;
+  /* Smaller Screen */
+}
+@media (min-width: 1024px) {
+  .digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist .theme-editor-card {
+  position: relative;
+  color: #242424;
+  border-radius: 4px;
+  padding: 16px;
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.08);
+          box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.08);
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist .theme-editor-card h4 {
+  font-size: 16px;
+  line-height: 1.3;
+  margin: 0 0 12px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist .theme-editor-card p {
+  font-size: 14px;
+  text-transform: capitalize;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist .theme-editor-card span {
+  position: absolute;
+  background-color: #d7d7d7;
+  opacity: 0.5;
+  top: 12px;
+  right: 12px;
+  color: #242424;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 4px 8px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist .theme-editor-card:hover {
+  -webkit-box-shadow: 0px 0px 1px 1px #b32d2e;
+          box-shadow: 0px 0px 1px 1px #b32d2e;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-content .pro-features-sec__inner .theme-guidelist .theme-editor-card:hover span {
+  background: -webkit-linear-gradient(left, #00a8d5, #00ddd8) !important;
+  color: #fff;
+  opacity: 1;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: 32px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar__card {
+  background-color: white;
+  padding: 32px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar__card--title {
+  margin: 0 0 12px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar__card--rating svg {
+  fill: #ffa000;
+  margin-bottom: 8px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar__card--descri {
+  font-size: 14px;
+  margin: 0 0 12px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar__card--btn {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+  font-size: 14px;
+  font-weight: 600;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar__card--btn svg {
+  fill: var(--primary-color);
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar .digital-marketing-freelancer-pro-card {
+  background: linear-gradient(to right, #d4335d, #ff5627);
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar .digital-marketing-freelancer-pro-card h2 {
+  color: #fff;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar .digital-marketing-freelancer-pro-card p {
+  color: #fff;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar .digital-marketing-freelancer-pro-card a {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 4px;
+}
+.digital-marketing-freelancer-theme-info-page__features .digital-marketing-freelancer-themeinfo-wrap .digital-marketing-freelancer-themeinfo-sidebar .digital-marketing-freelancer-pro-card a svg {
+  fill: #fff;
+}
+.digital-marketing-freelancer-theme-info-page .digital-marketing-freelancer-button {
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 12px;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.digital-marketing-freelancer-theme-info-page .digital-marketing-freelancer-primary-button {
+  background: -webkit-linear-gradient(left, #00a8d5, #00ddd8) !important;
+  color: #ffffff;
+}
+.digital-marketing-freelancer-theme-info-page .digital-marketing-freelancer-primary-button-dark {
+  background: #fff2c9;
+  color: #000000;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.digital-marketing-freelancer-theme-info-page .digital-marketing-freelancer-primary-button-darker {
+  background: #eaeaea !important;
+  color: #000000;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.digital-marketing-freelancer-theme-info-page .digital-marketing-freelancer-secondary-button {
+  background:-webkit-linear-gradient(left, #00a8d5, #00ddd8) !important;
+  color: #ffffff;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+
+/* NOTICE */
+
+#digital-marketing-freelancer-theme-notice {
+  border: none;
+  border-left: 4px solid #72aee6;
+}
+
+.wp-core-ui .notice.is-dismissible {
+  padding-right: 0;
+}
+
+.notice.is-dismissible .digital-marketing-freelancer-content-wrap {
+  padding-right: 38px;
+}
+
+.digital-marketing-freelancer-content-wrap {
+  background-image: url('theme-details-images/notice-bg.png');
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.digital-marketing-freelancer-notice-left {
+  padding: 40px;
+}
+
+.digital-marketing-freelancer-notice-left h2 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 0;
+  margin: 0;
+}
+
+.digital-marketing-freelancer-notice-left p {
+  font-size: 17px;
+  line-height: 30px;
+  margin: 25px 0;
+  padding: 0;
+}
+
+.notice-actions #install-activate-button {
+  background: #175FFF;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 199px;
+  padding: 2px 20px;
+  transition: all 0.2s linear;
+  text-decoration: none;
+}
+
+.notice-actions #btn-dismiss {
+  background: white;
+  color: #000;
+  font-weight: 400;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px 20px;
+  margin-left: 10px;
+  border: none;
+}
+.op-notice-dismiss-form{
+  display: inline-block;
+}
+.notice-actions #btn-install-activate:hover {
+  background: #003bbd;
+}
+.notice-actions {
+  display: flex;
+  align-items: center;
+}
+.digital-marketing-freelancer-notice-right {
+  padding: 32px 0 0;
+}
+form.digital-marketing-freelancer-notice-dismiss-form {
+  margin: 0 0 0 0;
+}
+.digital-marketing-freelancer-notice-right img {
+  width: 400px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 5px 0 #dfdfdf;
+}
+
+@media (max-width: 1024px) {
+  .digital-marketing-freelancer-content-wrap {
+    flex-wrap: wrap;
+  }
+
+  .digital-marketing-freelancer-notice-left {
+    padding: 25px;
+  }
+
+  .digital-marketing-freelancer-notice-right img {
+    display: none;
+  }
+}
+
+.digital-marketing-freelancer-themeinfo-sidebar__card.bundle h5 span {
+  color: #fff700;
+  animation: blink 2s infinite;
+  background: #ff4d4d;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+.digital-marketing-freelancer-themeinfo-sidebar__card.bundle h5 {
+  font-size: 23px;
+  text-transform: none;
+  line-height: 1.6em;
+  font-weight: 600;
+  color: #1b1b1b;
+  text-align: left;
+  margin: 10px 0;
+}
+.bundle-box a{
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 18px;
+  display: block;
+  text-align: center;
+  -webkit-box-shadow: 2px 3px 5px 0 #dfdfdf;
+  -moz-box-shadow: 2px 3px 5px 0 #dfdfdf;
+  box-shadow: 2px 3px 5px 0 #dfdfdf;
+  border-radius: 30px;
+  background: -webkit-linear-gradient(left, #e95581, #d559b8);
+  cursor: pointer;
+}
+.bundle-box a:hover{
+  background: #000;
+}
+.digital-marketing-freelancer-themeinfo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.digital-marketing-freelancer-themeinfo-col-xl-5 img {
+  width: 100%;
+}
+
+.digital-marketing-freelancer-themeinfo-col-xl-5{
+  width: 100%;
+}
+
+.digital-marketing-freelancer-themeinfo-col-xl-7{
+  width: 100%;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.digital-marketing-freelancer-pro-card__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.digital-marketing-freelancer-pro-card__offer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.digital-marketing-freelancer-pro-card__price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 50px;
+  padding: 0 4px;
+  border-radius: 50%;
+  background: #fff2c9;
+  color: #d4335d;
+  font-size: 18px;
+  font-weight: 800;
+}
+.digital-marketing-freelancer-pro-card__coupon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+.digital-marketing-freelancer-pro-card__coupon strong {
+  color: #ffe27a;
+  letter-spacing: 0.5px;
+}
+.digital-marketing-freelancer-pro-card__coupon:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+.digital-marketing-freelancer-pro-card__coupon .dashicons {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+.digital-marketing-freelancer-pro-card__coupon.is-copied .dashicons:before {
+  content: "\f147";
+}
+.digital-marketing-freelancer-pro-card__coupon-copied {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1e;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
+}
+.digital-marketing-freelancer-pro-card__coupon.is-copied .digital-marketing-freelancer-pro-card__coupon-copied {
+  opacity: 1;
+  visibility: visible;
+}
+
+.notice-actions #visit-site-button {
+  background: #175FFF;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 199px;
+  padding: 2px 20px;
+  transition: all 0.2s linear;
+  text-decoration: none;
+}
+.notice-actions #visit-site-button:hover {
+  opacity: 0.9;
+}

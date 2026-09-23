@@ -1,0 +1,1047 @@
+# Copyright (C) 2026 Themes Carts
+# This file is distributed under the GNU General Public License version 2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Digital Marketing Freelancer 2.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/digital-marketing-freelancer\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-02-27T08:56:48+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: digital-marketing-freelancer\n"
+
+#. Theme Name of the theme
+#: style.css
+#: inc/patterns/footer-default.php:106
+msgid "Digital Marketing Freelancer"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+#: functions.php:31
+msgid "https://www.themescarts.com/products/free-digital-marketing-wordpress-theme/"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "The Digital Marketing Freelancer WordPress Theme is a sleek, high-performance, and fully customizable solution tailored for professionals in the digital marketing space, such as SEO consultants, social media marketers, and content writers. This theme is perfect for building a modern website for freelancers or agencies, empowering them to highlight their expertise in SEO, PPC, content marketing, and online advertising with style and precision. With a focus on lead generation and conversion, it offers professional landing page layouts, interactive CTAs, and customizable lead forms designed to attract and convert clients effortlessly. Whether developing a personal branding site or a marketing strategist portfolio, this theme ensures your online presence stands out. It features clean, secure, and SEO-friendly coding, along with schema markup and fast-loading pages to enhance search visibility. Seamless integration with CRM tools and email automation platforms makes it ideal for freelancers and agencies managing multiple campaigns. With flexible customization options, drag-and-drop page builders, and elegant color schemes, users can easily create various digital marketing websites or marketing consultant portfolios. The full-site editing capability allows for complete creative control while providing translation readiness, RTL support, and various style options. Whether you're an independent strategist, an online marketing consultant, or a freelancer in the digital space, this theme offers everything you need to promote your services, build authority, and attract premium clients. The Digital Marketing Freelancer WordPress Theme combines speed, performance, and creativity, helping you elevate your digital brand presence effortlessly."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Themes Carts"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://www.themescarts.com/"
+msgstr ""
+
+#: functions.php:30
+msgid "https://www.themescarts.com/products/freelancer-wordpress-theme/"
+msgstr ""
+
+#: functions.php:32
+msgid "https://www.themescarts.com/products/wordpress-theme-bundle/"
+msgstr ""
+
+#: inc/block-patterns.php:18
+msgid "Digital Marketing Freelancer Patterns"
+msgstr ""
+
+#: inc/block-patterns.php:19
+#: inc/patterns/sidebar.php:35
+msgid "Pages"
+msgstr ""
+
+#: inc/customizer.php:22
+msgid "Digital Marketing Freelancer Pro"
+msgstr ""
+
+#: inc/customizer.php:23
+msgid "Buy Pro Theme"
+msgstr ""
+
+#: inc/customizer.php:29
+msgid "Get All Themes"
+msgstr ""
+
+#: inc/customizer.php:30
+msgid "Buy Now"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:103
+msgid "Insufficient permissions"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:111
+#: inc/TGM/tgm.php:11
+msgid "Siteready Coming Soon Under Construction"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:205
+msgid "Notice dismissed"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:312
+msgid "Theme Notice Image"
+msgstr ""
+
+#. translators: %s is the theme name
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:328
+msgid "Thank you for installing %s!"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:340
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:345
+msgid "ThemesCarts"
+msgstr ""
+
+#. translators: %1$s: Author Name, %2$s: Link
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:344
+msgid "Unlock the full potential of your new store with %1$s! Get started today by visiting %2$s to explore a wide range of ready-to-use patterns and demo templates, designed to enhance your online shopping experience."
+msgstr ""
+
+#. translators: %s: New version number available for the Siteready Coming Soon Under Construction plugin
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:363
+msgid "⚠️ Siteready Coming Soon Under Construction update available (v%s)."
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:367
+msgid "Update now"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:373
+msgid "Start Theme Activation & Demo Import"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/class-theme-notice.php:378
+msgid "Dismiss"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:25
+msgid "Your Ultimate Block Theme"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:28
+msgid "Version:-"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:42
+msgid "View Live Demo"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:47
+msgid "Free Documentaion"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:60
+msgid "Hello"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:61
+msgid "Welcome to"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:61
+msgid "Free"
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:64
+msgid " ensures your website looks exceptional, offering a smooth and engaging experience. With its stylish design and intuitive layout, it’s crafted to provide seamless navigation, whether you're showcasing destinations, itineraries, or booking options."
+msgstr ""
+
+#: inc/digital-marketing-freelancer-theme-info-page/templates/theme-details.php:66
+msgid " theme enhances your site’s appeal with user-friendly functionality."
+msgstr ""
+
+#: inc/patterns/footer-default.php:6
+msgid "Default Footer"
+msgstr ""
+
+#: inc/patterns/footer-default.php:14
+msgid "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years"
+msgstr ""
+
+#: inc/patterns/footer-default.php:38
+msgid "Home "
+msgstr ""
+
+#: inc/patterns/footer-default.php:42
+msgid "Home"
+msgstr ""
+
+#: inc/patterns/footer-default.php:46
+#: inc/patterns/footer-default.php:60
+msgid "About Us"
+msgstr ""
+
+#: inc/patterns/footer-default.php:50
+msgid "Services"
+msgstr ""
+
+#: inc/patterns/footer-default.php:54
+msgid "Contact"
+msgstr ""
+
+#: inc/patterns/footer-default.php:64
+msgid "Story"
+msgstr ""
+
+#: inc/patterns/footer-default.php:68
+msgid "Creative Team"
+msgstr ""
+
+#: inc/patterns/footer-default.php:72
+msgid "Founders"
+msgstr ""
+
+#: inc/patterns/footer-default.php:76
+msgid "Careers"
+msgstr ""
+
+#: inc/patterns/footer-default.php:82
+msgid "Links"
+msgstr ""
+
+#: inc/patterns/footer-default.php:86
+msgid "Terms of use"
+msgstr ""
+
+#: inc/patterns/footer-default.php:90
+msgid "Privacy Policy"
+msgstr ""
+
+#: inc/patterns/footer-default.php:94
+msgid "Cookie Policy"
+msgstr ""
+
+#: inc/patterns/footer-default.php:98
+msgid "Terms &amp; Conditions"
+msgstr ""
+
+#: inc/patterns/footer-default.php:106
+msgid "© 2026."
+msgstr ""
+
+#: inc/patterns/footer-default.php:106
+msgid "All rights reserved"
+msgstr ""
+
+#: inc/patterns/header-banner.php:6
+msgid "Header Banner"
+msgstr ""
+
+#: inc/patterns/header-banner.php:28
+msgid "take your business"
+msgstr ""
+
+#: inc/patterns/header-banner.php:33
+msgid "boost your online presence today!"
+msgstr ""
+
+#: inc/patterns/header-banner.php:37
+msgid "Lets transform your online potential into measurable growth!"
+msgstr ""
+
+#: inc/patterns/header-banner.php:42
+msgid "Read More"
+msgstr ""
+
+#: inc/patterns/header-default.php:6
+msgid "Default Header"
+msgstr ""
+
+#: inc/patterns/header-default.php:39
+msgid "Get in Touch"
+msgstr ""
+
+#: inc/patterns/header-default.php:66
+msgid "Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+msgstr ""
+
+#: inc/patterns/header-default.php:90
+msgid "call us"
+msgstr ""
+
+#: inc/patterns/header-default.php:94
+msgid "0987654321"
+msgstr ""
+
+#: inc/patterns/header-default.php:108
+msgid "mail"
+msgstr ""
+
+#: inc/patterns/header-default.php:112
+msgid "support@example.com"
+msgstr ""
+
+#: inc/patterns/hidden-404.php:6
+msgid "404 Not Found"
+msgstr ""
+
+#: inc/patterns/hidden-404.php:10
+msgid "404"
+msgstr ""
+
+#: inc/patterns/hidden-404.php:14
+msgid "This page is not found"
+msgstr ""
+
+#: inc/patterns/inner-banner.php:6
+msgid "Inner Banner"
+msgstr ""
+
+#: inc/patterns/latest-blog.php:6
+msgid "Latest Blogs"
+msgstr ""
+
+#: inc/patterns/latest-blog.php:15
+msgid "Latest News"
+msgstr ""
+
+#: inc/patterns/latest-blog.php:20
+msgid "Articals On Digital Marketing "
+msgstr ""
+
+#: inc/patterns/post-one-column.php:6
+msgid "Post One Column"
+msgstr ""
+
+#: inc/patterns/post-two-column.php:6
+msgid "Post Two Column"
+msgstr ""
+
+#: inc/patterns/process-section.php:6
+msgid "Process Section"
+msgstr ""
+
+#: inc/patterns/process-section.php:15
+msgid "how it work"
+msgstr ""
+
+#: inc/patterns/process-section.php:19
+msgid "our step-by-step marketing process"
+msgstr ""
+
+#: inc/patterns/process-section.php:43
+msgid "01"
+msgstr ""
+
+#: inc/patterns/process-section.php:47
+msgid "Competitor analysis and"
+msgstr ""
+
+#: inc/patterns/process-section.php:47
+msgid "keyword research"
+msgstr ""
+
+#: inc/patterns/process-section.php:70
+msgid "02"
+msgstr ""
+
+#: inc/patterns/process-section.php:74
+msgid "Craft a tailored SEO and"
+msgstr ""
+
+#: inc/patterns/process-section.php:74
+msgid "digital plan"
+msgstr ""
+
+#: inc/patterns/process-section.php:97
+msgid "03"
+msgstr ""
+
+#: inc/patterns/process-section.php:101
+msgid "Optimize your website for"
+msgstr ""
+
+#: inc/patterns/process-section.php:101
+msgid "search engines"
+msgstr ""
+
+#: inc/patterns/process-section.php:124
+msgid "04"
+msgstr ""
+
+#: inc/patterns/process-section.php:128
+msgid "Focus on long-term success &amp; sustainable growth"
+msgstr ""
+
+#: inc/patterns/sidebar.php:6
+msgid "Sidebar"
+msgstr ""
+
+#: inc/patterns/sidebar.php:11
+msgid "Search Here"
+msgstr ""
+
+#: inc/patterns/sidebar.php:19
+msgid "Categories"
+msgstr ""
+
+#: inc/patterns/sidebar.php:27
+msgid "Archives"
+msgstr ""
+
+#: inc/patterns/sidebar.php:43
+msgid "Social Media"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:327
+msgid "Install Required Plugins"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:328
+msgid "Install Plugins"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:330
+msgid "Installing Plugin: %s"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:332
+msgid "Updating Plugin: %s"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:333
+msgid "Something went wrong with the plugin API."
+msgstr ""
+
+#. translators: 1: plugin name(s).
+#: inc/TGM/class-tgm-plugin-activation.php:334
+msgid "This theme requires the following plugin: %1$s."
+msgid_plural "This theme requires the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: inc/TGM/class-tgm-plugin-activation.php:340
+msgid "This theme recommends the following plugin: %1$s."
+msgid_plural "This theme recommends the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: inc/TGM/class-tgm-plugin-activation.php:346
+msgid "The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s."
+msgid_plural "The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: inc/TGM/class-tgm-plugin-activation.php:352
+msgid "There is an update available for: %1$s."
+msgid_plural "There are updates available for the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: inc/TGM/class-tgm-plugin-activation.php:358
+msgid "The following required plugin is currently inactive: %1$s."
+msgid_plural "The following required plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: inc/TGM/class-tgm-plugin-activation.php:364
+msgid "The following recommended plugin is currently inactive: %1$s."
+msgid_plural "The following recommended plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:370
+msgid "Begin installing plugin"
+msgid_plural "Begin installing plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:375
+msgid "Begin updating plugin"
+msgid_plural "Begin updating plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:380
+msgid "Begin activating plugin"
+msgid_plural "Begin activating plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:385
+msgid "Return to Required Plugins Installer"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:386
+#: inc/TGM/class-tgm-plugin-activation.php:827
+#: inc/TGM/class-tgm-plugin-activation.php:2533
+#: inc/TGM/class-tgm-plugin-activation.php:3580
+msgid "Return to the Dashboard"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:387
+#: inc/TGM/class-tgm-plugin-activation.php:3159
+msgid "Plugin activated successfully."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:388
+#: inc/TGM/class-tgm-plugin-activation.php:2952
+msgid "The following plugin was activated successfully:"
+msgid_plural "The following plugins were activated successfully:"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:390
+msgid "No action taken. Plugin %1$s was already active."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:392
+msgid "Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin."
+msgstr ""
+
+#. translators: 1: dashboard link.
+#: inc/TGM/class-tgm-plugin-activation.php:394
+msgid "All plugins installed and activated successfully. %1$s"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:395
+msgid "Dismiss this notice"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:396
+msgid "There are one or more required or recommended plugins to install, update or activate."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:397
+msgid "Please contact the administrator of this site for help."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:522
+msgid "This plugin needs to be updated to be compatible with your theme."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:523
+msgid "Update Required"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:934
+msgid "The remote plugin package does not contain a folder with the desired slug and renaming did not work."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:934
+#: inc/TGM/class-tgm-plugin-activation.php:937
+msgid "Please contact the plugin provider and ask them to package their plugin according to the WordPress guidelines."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:937
+msgid "The remote plugin package consists of more than one file, but the files are not packaged in a folder."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:1121
+#: inc/TGM/class-tgm-plugin-activation.php:2948
+msgctxt "plugin A *and* plugin B"
+msgid "and"
+msgstr ""
+
+#. translators: %s: version number
+#: inc/TGM/class-tgm-plugin-activation.php:1982
+msgid "TGMPA v%s"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2273
+msgid "Required"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2276
+msgid "Recommended"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2292
+msgid "WordPress Repository"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2295
+msgid "External Source"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2298
+msgid "Pre-Packaged"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2315
+msgid "Not Installed"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2319
+msgid "Installed But Not Activated"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2321
+msgid "Active"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2327
+msgid "Required Update not Available"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2330
+msgid "Requires Update"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2333
+msgid "Update recommended"
+msgstr ""
+
+#. translators: 1: install status, 2: update status
+#: inc/TGM/class-tgm-plugin-activation.php:2342
+msgctxt "Install/Update Status"
+msgid "%1$s, %2$s"
+msgstr ""
+
+#. translators: 1: number of plugins.
+#: inc/TGM/class-tgm-plugin-activation.php:2388
+msgctxt "plugins"
+msgid "All <span class=\"count\">(%s)</span>"
+msgid_plural "All <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: inc/TGM/class-tgm-plugin-activation.php:2392
+msgid "To Install <span class=\"count\">(%s)</span>"
+msgid_plural "To Install <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: inc/TGM/class-tgm-plugin-activation.php:2396
+msgid "Update Available <span class=\"count\">(%s)</span>"
+msgid_plural "Update Available <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: inc/TGM/class-tgm-plugin-activation.php:2400
+msgid "To Activate <span class=\"count\">(%s)</span>"
+msgid_plural "To Activate <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2482
+msgctxt "as in: \"version nr unknown\""
+msgid "unknown"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2490
+msgid "Installed version:"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2498
+msgid "Minimum required version:"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2510
+msgid "Available version:"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2533
+msgid "No plugins to install, update or activate."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2547
+msgid "Plugin"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2548
+msgid "Source"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2549
+msgid "Type"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2553
+msgid "Version"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2554
+msgid "Status"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: inc/TGM/class-tgm-plugin-activation.php:2603
+msgid "Install %2$s"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: inc/TGM/class-tgm-plugin-activation.php:2608
+msgid "Update %2$s"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: inc/TGM/class-tgm-plugin-activation.php:2614
+msgid "Activate %2$s"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2684
+msgid "Upgrade message from the plugin author:"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2717
+msgid "Install"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2723
+msgid "Update"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2726
+msgid "Activate"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2757
+msgid "No plugins were selected to be installed. No action taken."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2759
+msgid "No plugins were selected to be updated. No action taken."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2800
+msgid "No plugins are available to be installed at this time."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2802
+msgid "No plugins are available to be updated at this time."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2908
+msgid "No plugins were selected to be activated. No action taken."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:2934
+msgid "No plugins are available to be activated at this time."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:3158
+msgid "Plugin activation failed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: inc/TGM/class-tgm-plugin-activation.php:3498
+msgid "Updating Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#. translators: 1: plugin name, 2: error message.
+#: inc/TGM/class-tgm-plugin-activation.php:3501
+msgid "An error occurred while installing %1$s: <strong>%2$s</strong>."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:3503
+msgid "The installation of %1$s failed."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:3507
+msgid "The installation and activation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:3509
+msgid "%1$s installed and activated successfully."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:3509
+#: inc/TGM/class-tgm-plugin-activation.php:3517
+msgid "Show Details"
+msgstr ""
+
+#. translators: 1: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:3509
+#: inc/TGM/class-tgm-plugin-activation.php:3517
+msgid "Hide Details"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:3510
+msgid "All installations and activations have been completed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: inc/TGM/class-tgm-plugin-activation.php:3512
+msgid "Installing and Activating Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:3515
+msgid "The installation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: inc/TGM/class-tgm-plugin-activation.php:3517
+msgid "%1$s installed successfully."
+msgstr ""
+
+#: inc/TGM/class-tgm-plugin-activation.php:3518
+msgid "All installations have been completed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: inc/TGM/class-tgm-plugin-activation.php:3520
+msgid "Installing Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: styles/forest-moss.json
+msgctxt "Style variation name"
+msgid "Forest-Moss"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Background"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Foreground"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Extra Primary"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Extra Secondary"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Extra Primary Second"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Extra Primary Third"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr ""
+
+#: styles/forest-moss.json
+#: styles/midnight-bliss.json
+#: styles/ocean-wave.json
+#: styles/red-green.json
+#: styles/royal-plum.json
+#: styles/sunset-blush.json
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr ""
+
+#: styles/midnight-bliss.json
+msgctxt "Style variation name"
+msgid "Midnight-Bliss"
+msgstr ""
+
+#: styles/ocean-wave.json
+msgctxt "Style variation name"
+msgid "Ocean-Wave"
+msgstr ""
+
+#: styles/red-green.json
+msgctxt "Style variation name"
+msgid "Red-Green"
+msgstr ""
+
+#: styles/royal-plum.json
+msgctxt "Style variation name"
+msgid "Royal-Plum"
+msgstr ""
+
+#: styles/sunset-blush.json
+msgctxt "Style variation name"
+msgid "Sunset-Blush"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Front Page"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Pages (Right Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Pages (Left Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Pages (Without Header Image)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog (Full Width)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog (Left Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog (Without Header Image)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Poppins"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Inter"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Regular"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and background"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and secondary"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and tertiary"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Link and background"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Link and secondary"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical secondary to tertiary"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical secondary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical tertiary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to foreground"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal secondary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Banner Bg"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Extra Tertiary"
+msgstr ""

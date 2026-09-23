@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"title": "Royal-Plum",
+	"version": 2,
+	"settings": {
+	  "color": {
+		"palette": [
+			{
+				"slug": "background",
+				"color": "#000000",
+				"name": "Background"
+			},
+			{
+				"slug": "foreground",
+				"color": "#ffffff",
+				"name": "Foreground"
+			},
+		  { "slug": "extra-primary", "color": "#8e44ad", "name": "Extra Primary" },
+		  { "slug": "extra-secondary", "color": "#9b59b6", "name": "Extra Secondary" },
+		  { "slug": "extra-primary-second", "color": "#9461a9", "name": "Extra Primary Second" },
+		  { "slug": "extra-primary-third", "color": "#512561", "name": "Extra Primary Third" },
+		  {
+			  "slug": "primary",
+			  "color": "#0d0c0c",
+			  "name": "Primary"
+		  },
+		  {
+			  "slug": "secondary",
+			  "color": "#181818",
+			  "name": "Secondary"
+		  }
+		]
+	  }
+	}
+  }

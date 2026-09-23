@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"title": "Forest-Moss",
+	"version": 2,
+	"settings": {
+	  "color": {
+		"palette": [
+			{
+				"slug": "background",
+				"color": "#000000",
+				"name": "Background"
+			},
+			{
+				"slug": "foreground",
+				"color": "#ffffff",
+				"name": "Foreground"
+			},
+		  { "slug": "extra-primary", "color": "#2e8b57", "name": "Extra Primary" },
+		  { "slug": "extra-secondary", "color": "#3cb371", "name": "Extra Secondary" },
+		  { "slug": "extra-primary-second", "color": "#466666", "name": "Extra Primary Second" },
+		  { "slug": "extra-primary-third", "color": "#1d3636", "name": "Extra Primary Third" },
+		  {
+			  "slug": "primary",
+			  "color": "#0d0c0c",
+			  "name": "Primary"
+		  },
+		  {
+			  "slug": "secondary",
+			  "color": "#181818",
+			  "name": "Secondary"
+		  }
+		]
+	  }
+	}
+  }
+  
